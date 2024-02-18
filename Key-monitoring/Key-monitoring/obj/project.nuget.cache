@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "l80dYwFl5rJmoGVLRqJlhvZYBKZho/Gp9Vxtr1AXHSDsNho7gBIGm3OlSIFapJBCLGt3l04qAIWEhK7DqlVx2g==",
+  "dgSpecHash": "KAC6Rh80oLb120kYEHakg4PqfPCDybc9H6t5X+TR5cU1Hc5Tgn7sGpKKz8tHX7axdWCvUTMTpY0E8x8tI3VwYQ==",
   "success": true,
-  "projectFilePath": "/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring.csproj",
+  "projectFilePath": "/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoringr/Key-monitoring/Key-monitoring/Key-monitoring.csproj",
   "expectedPackageFiles": [
     "/Users/kiselevmaksim/.nuget/packages/microsoft.aspnetcore.openapi/7.0.15/microsoft.aspnetcore.openapi.7.0.15.nupkg.sha512",
     "/Users/kiselevmaksim/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
