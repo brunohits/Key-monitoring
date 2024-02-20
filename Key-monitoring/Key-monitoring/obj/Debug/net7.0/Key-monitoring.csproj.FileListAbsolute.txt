@@ -42,3 +42,13 @@
 /Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoringr/Key-monitoring/Key-monitoring/obj/Debug/net7.0/Key-monitoring.pdb
 /Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoringr/Key-monitoring/Key-monitoring/obj/Debug/net7.0/Key-monitoring.genruntimeconfig.cache
 /Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoringr/Key-monitoring/Key-monitoring/obj/Debug/net7.0/ref/Key-monitoring.dll
+/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/obj/Debug/net7.0/Key-monitoring.csproj.AssemblyReference.cache
+/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/obj/Debug/net7.0/Key-monitoring.GeneratedMSBuildEditorConfig.editorconfig
+/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/obj/Debug/net7.0/Key-monitoring.AssemblyInfoInputs.cache
+/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/obj/Debug/net7.0/Key-monitoring.AssemblyInfo.cs
+/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/obj/Debug/net7.0/Key-monitoring.csproj.CoreCompileInputs.cache
+/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/obj/Debug/net7.0/Key-monitoring.MvcApplicationPartsAssemblyInfo.cs
+/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/obj/Debug/net7.0/Key-monitoring.MvcApplicationPartsAssemblyInfo.cache
+/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/obj/Debug/net7.0/Key-monitoring.dll
+/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/obj/Debug/net7.0/refint/Key-monitoring.dll
+/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/obj/Debug/net7.0/Key-monitoring.pdb
