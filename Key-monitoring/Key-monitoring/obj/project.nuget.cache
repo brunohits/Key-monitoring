@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "EUTiKD/qwGLhtpIz2cpuVsBbMamT7xrU+lijhG9NEh64h+FmmEe/Mf2P5BOaDcFFIrukwmRkt2OOd1wCR0OiDQ==",
+  "dgSpecHash": "e7ItRtqUiCnLNrqMTL3DdqKgsPbfH4SlBBry09W6c87/pUsGXp/ZImx4D53VEYrRlE+9bNzbJJFDnBVuqWMw4A==",
   "success": true,
-  "projectFilePath": "/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoringr/Key-monitoring/Key-monitoring/Key-monitoring.csproj",
+  "projectFilePath": "/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring.csproj",
   "expectedPackageFiles": [
     "/Users/kiselevmaksim/.nuget/packages/automapper/9.0.0/automapper.9.0.0.nupkg.sha512",
     "/Users/kiselevmaksim/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/7.0.0/automapper.extensions.microsoft.dependencyinjection.7.0.0.nupkg.sha512",

@@ -88,60 +88,12 @@ public class AuthService : IAuthService
                 Password = userRegisterDTO.Password
             };
 
-            return await Login(ForSuccessfulLogin);
+            // return await Login(ForSuccessfulLogin);
+            return null;
         }
 
 
 
-        //...........................................<Вход в аккаунт>.......................................................
-        public async Task<TokenDTO> Login(UserLoginDTO ForSuccessfulLogin)
-        {
-            ForSuccessfulLogin.Email = NormalizeAttribute(ForSuccessfulLogin.Email);
-            var identity = await GetIdentity(ForSuccessfulLogin.Email, ForSuccessfulLogin.Password);
-            var now = DateTime.UtcNow;
-
-            var jwt = new JwtSecurityToken(
-                issuer: TokenConfigurations.Issuer,
-                audience: TokenConfigurations.Audience,
-                notBefore: now,
-                claims: identity.Claims,
-                expires: now.AddMinutes(TokenConfigurations.Lifetime),
-                signingCredentials: new SigningCredentials(TokenConfigurations.GetSymmetricSecurityKey(),
-                    SecurityAlgorithms.HmacSha256));
-
-            var encodeJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-           
-
-            return new TokenDTO()
-            {
-                Token = encodeJwt
-            }; 
-        }
-        //...........................................<Выход из аккаунт>.......................................................
-        public async Task Logout(string token)
-        {
-            if (token == null)
-            {
-                throw new ArgumentNullException(nameof(token), "Token cannot be null.");
-            }
-
-            var alreadyExistsToken = await _dbContext.Tokens.FirstOrDefaultAsync(x => x.InvalidToken == token);
-
-            if (alreadyExistsToken == null)
-            {
-                var handler = new JwtSecurityTokenHandler();
-                var expiredDate = handler.ReadJwtToken(token).ValidTo;
-                _dbContext.Tokens.Add(new TokenModel { InvalidToken = token, ExpiredDate = expiredDate });
-                await _dbContext.SaveChangesAsync();
-            }
-            else
-            {
-                var exception = new Exception();
-                exception.Data.Add(StatusCodes.Status401Unauthorized.ToString(), "Token is already invalid");
-                throw exception;
-            }
-        }
 
 
 

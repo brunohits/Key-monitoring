@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoringr/Key-monitoring/Key-monitoring/Key-monitoring.csproj": {}
+    "/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring.csproj": {}
   },
   "projects": {
-    "/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoringr/Key-monitoring/Key-monitoring/Key-monitoring.csproj": {
+    "/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoringr/Key-monitoring/Key-monitoring/Key-monitoring.csproj",
+        "projectUniqueName": "/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring.csproj",
         "projectName": "Key-monitoring",
-        "projectPath": "/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoringr/Key-monitoring/Key-monitoring/Key-monitoring.csproj",
+        "projectPath": "/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring.csproj",
         "packagesPath": "/Users/kiselevmaksim/.nuget/packages/",
-        "outputPath": "/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoringr/Key-monitoring/Key-monitoring/obj/",
+        "outputPath": "/Users/kiselevmaksim/RiderProjects/Key-monitoring/Key-monitoring/Key-monitoring/Key-monitoring/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/kiselevmaksim/.nuget/NuGet/NuGet.Config"
