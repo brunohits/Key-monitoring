@@ -77,7 +77,7 @@ public class AuthService : IAuthService
                 PhoneNumber = userRegisterDTO.PhoneNumber,
                 FacultyId = userRegisterDTO.FacultyId,
                 CreateTime = DateTime.UtcNow,
-                Role = RoleEnum.Student
+                Role = RoleEnum.NotСonfirmed
             });
 
             await _dbContext.SaveChangesAsync();
@@ -142,10 +142,35 @@ public class AuthService : IAuthService
                 throw exception;
             }
         }
+        //...........................................<Информация о владельце аккаунта>...................................................
 
-
-
- 
+        public async Task<UserDTO> GetInfoUser(Guid id)
+        {
+            var searchUser = await _dbContext.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
+            
+            if(searchUser == null)
+            {
+                var exception = new Exception();
+                exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "ПОьзователь был не найден");
+                throw exception;
+            }
+            else
+            {
+                var searchFacultyName = _dbContext.Faculties.Where(x => x.FacultyId == searchUser.FacultyId).FirstOrDefault();
+                var user = new UserDTO
+                {
+                    BirthDate = searchUser.BirthDate,
+                    Email = searchUser.Email,
+                    Faculty = searchFacultyName.Name,
+                    FacultyId = searchUser.FacultyId,
+                    FullName = searchUser.FullName,
+                    Gender = searchUser.Gender,
+                    PhoneNumber = searchUser.PhoneNumber,
+                    Role = searchUser.Role
+                };
+                return user;
+            }
+        }
 
         //..............................<Удаление пробелов и верхнего регистра>............................................
 

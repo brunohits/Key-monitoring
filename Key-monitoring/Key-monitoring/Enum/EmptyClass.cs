@@ -6,6 +6,8 @@ namespace Key_monitoring.Enum
     public enum RoleEnum
 	{
 		Student,
-		Teacher
+		Teacher,
+		DeanOffice, 
+		NotСonfirmed
 	}
 }
