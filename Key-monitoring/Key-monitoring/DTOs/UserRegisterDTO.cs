@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-
+using Key_monitoring.Enum;
 namespace Key_monitoring.DTOs;
 
 public class UserRegisterDTO
@@ -20,4 +20,5 @@ public class UserRegisterDTO
     [Phone]
     public string? PhoneNumber { get; set; }
     public Guid FacultyId { get; set; }
+    public RoleEnum Role { get; set; }
 }

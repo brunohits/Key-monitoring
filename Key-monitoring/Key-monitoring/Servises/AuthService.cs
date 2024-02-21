@@ -38,8 +38,8 @@ public class AuthService : IAuthService
                 throw new ArgumentException("Неверный формат телефонного номера. Используйте формат +7xxxxxxxxxx.");
             }
             var r = userRegisterDTO.FacultyId;
-           var existingSpeciality = await _dbContext.Faculties.FirstOrDefaultAsync(s => s.FacultyId == userRegisterDTO.FacultyId);
-        
+            var existingSpeciality = await _dbContext.Faculties.FirstOrDefaultAsync(s => s.FacultyId == userRegisterDTO.FacultyId);
+
             if (existingSpeciality == null)
             {
                 throw new ArgumentException($"Специальность с Id '{userRegisterDTO.FacultyId}' не найдена.");
@@ -76,7 +76,8 @@ public class AuthService : IAuthService
                 Password = savedPasswordHash,
                 PhoneNumber = userRegisterDTO.PhoneNumber,
                 FacultyId = userRegisterDTO.FacultyId,
-                CreateTime = DateTime.UtcNow
+                CreateTime = DateTime.UtcNow,
+                Role = RoleEnum.Student
             });
 
             await _dbContext.SaveChangesAsync();
@@ -90,7 +91,6 @@ public class AuthService : IAuthService
 
             return await Login(ForSuccessfulLogin);
         }
-
 
 
         //...........................................<Вход в аккаунт>.......................................................
