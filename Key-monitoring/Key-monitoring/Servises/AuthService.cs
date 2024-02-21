@@ -151,7 +151,7 @@ public class AuthService : IAuthService
             if(searchUser == null)
             {
                 var exception = new Exception();
-                exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "ПОьзователь был не найден");
+                exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Пользователь был не найден");
                 throw exception;
             }
             else
