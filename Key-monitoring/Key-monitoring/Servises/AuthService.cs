@@ -144,10 +144,16 @@ public class AuthService : IAuthService
         }
         //...........................................<Информация о владельце аккаунта>...................................................
 
-        public async Task<UserDTO> GetInfoUser(Guid id)
+        public async Task<UserDTO> GetInfoUser(Guid id, string token)
         {
             var searchUser = await _dbContext.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
-            
+            var checkToken = await _dbContext.Tokens.FirstOrDefaultAsync(x => x.InvalidToken == token);
+            if (checkToken != null)
+            {
+                var ex = new Exception();
+                ex.Data.Add(StatusCodes.Status401Unauthorized.ToString(), "Данный тонен устарел");
+                throw ex;
+            }
             if(searchUser == null)
             {
                 var exception = new Exception();
@@ -169,6 +175,41 @@ public class AuthService : IAuthService
                     Role = searchUser.Role
                 };
                 return user;
+            }
+        }
+
+        public async Task ChangeInfoAboutUser(Guid id, ChangeUserInfoDTO changeUserInfoDto, string token)
+        {
+            var chekValidToken = _dbContext.Tokens
+                .Where(x => x.InvalidToken == token)
+                .FirstOrDefault();
+
+            if (chekValidToken == null)
+            {
+                var userEntity = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (userEntity == null)
+                {
+                    throw new KeyNotFoundException("User not exists");
+                }
+                else
+                {
+
+                    
+                    CheckBirthDate(changeUserInfoDto.BirthDate);
+                    await CheckEmailIdentity(changeUserInfoDto.Email);
+
+                    userEntity.FullName = changeUserInfoDto.Name;
+                    userEntity.BirthDate = changeUserInfoDto.BirthDate;
+                    userEntity.PhoneNumber = changeUserInfoDto.Phone;
+                    userEntity.Email = changeUserInfoDto.Email;
+
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                throw new UnauthorizedAccessException("Token is already invalid");
             }
         }
 
