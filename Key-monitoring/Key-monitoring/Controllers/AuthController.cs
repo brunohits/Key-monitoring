@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Key_monitoring.DTOs;
 using Key_monitoring.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -122,8 +123,10 @@ namespace Key_monitoring.Controllers
         [HttpGet("profile")]
         public async Task<IActionResult> GetInfoAboutUser()
         {
+            string token = await HttpContext.GetTokenAsync("access_token");
+           
             try{
-                var result = await _authService.GetInfoUser(Guid.Parse(User.Identity.Name));
+                var result = await _authService.GetInfoUser(Guid.Parse(User.Identity.Name), token);
                 return Ok(result);
             }
             catch(Exception ex)
@@ -136,11 +139,54 @@ namespace Key_monitoring.Controllers
                 {
                     return NotFound(ex.Data[StatusCodes.Status404NotFound.ToString()]);
                 }
+                else if (ex.Data.Contains(StatusCodes.Status401Unauthorized.ToString()))
+                {
+                    return Unauthorized(StatusCodes.Status401Unauthorized.ToString());
+                }
                 return StatusCode(500, "Внутренняя ошибка сервера.");
             }
         }
 
-        
+        [Authorize]
+        [HttpGet("Change/Profile")]
+        public async Task<IActionResult> ChangeUserInfo(ChangeUserInfoDTO changeUserInfoDto)
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            try
+            {
+
+                if (!User.Identity.IsAuthenticated || !Guid.TryParse(User.Identity.Name, out Guid userId))
+                {
+                    return Unauthorized("User is not authenticated");
+                }
+
+                await _authService.ChangeInfoAboutUser(userId, changeUserInfoDto, token);
+
+                return Ok("Profile updated successfully");
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("User not found");
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                if (ex.Message == "Token is already invalid")
+                {
+                    return Unauthorized("Token is invalid");
+                }
+                throw; 
+            }
+            catch (Exception ex)
+            {
+                if (ex.Data.Contains(StatusCodes.Status409Conflict.ToString()))
+                {
+                    return Conflict(ex.Message);
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request");
+            }
+        }
+
     }
 }
 

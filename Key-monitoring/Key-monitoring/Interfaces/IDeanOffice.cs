@@ -1,6 +1,8 @@
+using Key_monitoring.Enum;
+
 namespace Key_monitoring.Interfaces;
 
-public interface DeanOffice
+public interface IDeanOffice
 {
-    Task GiveRole();
+    Task GiveRole(Guid id, RoleEnum roleEnum, Guid IdUser);
 }
