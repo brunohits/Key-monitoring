@@ -1,0 +1,25 @@
+﻿<Properties StartupConfiguration="{D1948FF6-B306-46C8-B714-AFCCD90A7CFD}|https">
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Key-monitoring/Program.cs">
+    <Files>
+      <File FileName="Key-monitoring/Program.cs" Line="3" Column="12" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Key-monitoring" expanded="True">
+            <Node name="Key-monitoring" expanded="True">
+              <Node name="Program.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Key-monitoring PreferredExecutionTarget="/Applications/Yandex.app" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
