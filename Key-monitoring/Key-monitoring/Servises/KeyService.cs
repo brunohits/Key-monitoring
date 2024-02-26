@@ -135,6 +135,33 @@ namespace Key_monitoring.Servises
             }
             return fullKey;
         }
+
+        public async Task<Boolean> ChangeKeyStatus(Guid keyId, Guid? userId)
+        {
+            var key = await _dbContext.Keys.FirstOrDefaultAsync(x => x.Id == keyId);
+            if(key == null)
+            {
+                throw new ArgumentException("wrong key Id");
+            }
+            if(userId == null)
+            {
+                key.Owner = null;
+                _dbContext.Keys.Update(key);
+                await _dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                if(user == null) 
+                {
+                    throw new ArgumentException("wrong user Id");
+                }
+                key.Owner = user;
+                _dbContext.Keys.Update(key);
+                await _dbContext.SaveChangesAsync();
+            }
+            return true;
+        }
     }
 }
 

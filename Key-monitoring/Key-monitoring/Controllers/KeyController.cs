@@ -76,6 +76,22 @@ namespace Key_monitoring.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+        [Route("KeyStatus")]
+        public async Task<IActionResult> KeyStatusChange([FromBody] Guid keyId, [FromBody] Guid? userId)
+        {
+            try
+            {
+                var result = await _keyService.ChangeKeyStatus(keyId, userId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
 
