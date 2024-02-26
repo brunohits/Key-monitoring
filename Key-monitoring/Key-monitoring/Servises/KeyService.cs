@@ -103,9 +103,37 @@ namespace Key_monitoring.Servises
             return KeyList;
         }
 
-        public async Task<KeyListDTO> GetKeyInfo(Guid id)
+        public async Task<List<KeyFullModelDTO>> GetKeyInfo(Guid id, DateTime start, DateTime finish)
         {
-
+            var allpairs = await _dbContext.Raspisanies.Where(x => x.PairStart >= start && x.PairStart <= finish).ToListAsync();
+            if(allpairs.Count == 0 || allpairs == null) 
+            {
+                throw new ArgumentException("To big pag");
+            }
+            var fullKey = new List<KeyFullModelDTO>();
+            foreach (var pair in allpairs) 
+            {
+                var reserv = await _dbContext.Reservations.FirstOrDefaultAsync(x => x.key.Id == id && x.pair ==  pair);
+                var keyData = new KeyFullModelDTO
+                {
+                    PairStart = pair.PairStart,
+                    status = ""
+                };
+                if(reserv == null)
+                {
+                    keyData.status = "open";
+                    keyData.userId = null;
+                    keyData.userName = null;
+                }
+                else
+                {
+                    keyData.status = "reserved";
+                    keyData.userId = reserv.user.Id;
+                    keyData.userName = reserv.user.FullName;
+                }
+                fullKey.Add(keyData);
+            }
+            return fullKey;
         }
     }
 }

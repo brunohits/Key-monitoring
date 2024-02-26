@@ -64,11 +64,11 @@ namespace Key_monitoring.Controllers
 
         [HttpGet]
         [Route("Key")]
-        public async Task<IActionResult> KeyInfo([FromHeader] Guid id)
+        public async Task<IActionResult> KeyInfo([FromHeader] Guid id, [FromBody] DateTime start, [FromBody] DateTime finish)
         {
             try
             {
-                return Ok(await _keyService.GetKeyInfo(id));
+                return Ok(await _keyService.GetKeyInfo(id, start, finish));
             }
             catch (Exception ex)
             {
