@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-
+using Key_monitoring.Enum;
 namespace Key_monitoring.Models;
 
 public class UserModel
@@ -24,5 +24,6 @@ public class UserModel
         public DateTime CreateTime { get; set; }
 
         public Guid FacultyId { get; set; }
+        public RoleEnum Role { get; set; }
     
 }

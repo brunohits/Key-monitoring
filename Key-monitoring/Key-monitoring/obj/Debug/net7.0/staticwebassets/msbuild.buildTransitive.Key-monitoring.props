@@ -1,3 +1,3 @@
 ﻿<Project>
-  <Import Project="../buildMultiTargeting/Key-monitoring.props" />
+  <Import Project="..\buildMultiTargeting\Key-monitoring.props" />
 </Project>

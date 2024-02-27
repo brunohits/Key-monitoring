@@ -1,4 +1,5 @@
-﻿using Key_monitoring.Models;
+﻿using Key_monitoring.Enum;
+using Key_monitoring.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Key_monitoring.DTOs;
@@ -11,4 +12,5 @@ public class KeyListElementDTO
     public string KeyStatus { get; set; }
     public Guid? OwnerId { get; set; }
     public string? OwnerName { get; set; }
+    public RoleEnum? OwnerRole { get; set; }
 }

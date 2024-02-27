@@ -2,7 +2,7 @@
 
 namespace Key_monitoring.Models;
 
-public class RaspisanieModel
+public class ScheduleModel
 {
     [Key]
     public Guid Id { get; set; }

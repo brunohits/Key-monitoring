@@ -9,6 +9,13 @@ public class ApplicationDbContext : DbContext
     public DbSet<TokenModel> Tokens { get; set; }
     public DbSet<FacultyModel> Faculties { get; set; }
     public DbSet<KeyModel> Keys { get; set; }
-    public DbSet<RaspisanieModel> Raspisanies { get; set; }
-    public DbSet<KeyReservationModel> Reservations { get; set; }
+    public DbSet<ScheduleModel> Schedule {  get; set; }
+
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<UserModel>().HasKey(x => x.Id);
+        modelBuilder.Entity<UserModel>().HasIndex(u => u.Email).IsUnique();
+        modelBuilder.Entity<UserModel>().HasIndex(u => u.FullName).IsUnique();
+    }
 }

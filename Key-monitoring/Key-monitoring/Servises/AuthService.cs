@@ -38,8 +38,8 @@ public class AuthService : IAuthService
                 throw new ArgumentException("Неверный формат телефонного номера. Используйте формат +7xxxxxxxxxx.");
             }
             var r = userRegisterDTO.FacultyId;
-           var existingSpeciality = await _dbContext.Faculties.FirstOrDefaultAsync(s => s.FacultyId == userRegisterDTO.FacultyId);
-        
+            var existingSpeciality = await _dbContext.Faculties.FirstOrDefaultAsync(s => s.FacultyId == userRegisterDTO.FacultyId);
+
             if (existingSpeciality == null)
             {
                 throw new ArgumentException($"Специальность с Id '{userRegisterDTO.FacultyId}' не найдена.");
@@ -76,7 +76,8 @@ public class AuthService : IAuthService
                 Password = savedPasswordHash,
                 PhoneNumber = userRegisterDTO.PhoneNumber,
                 FacultyId = userRegisterDTO.FacultyId,
-                CreateTime = DateTime.UtcNow
+                CreateTime = DateTime.UtcNow,
+                Role = RoleEnum.NotСonfirmed
             });
 
             await _dbContext.SaveChangesAsync();
@@ -90,7 +91,6 @@ public class AuthService : IAuthService
 
             return await Login(ForSuccessfulLogin);
         }
-
 
 
         //...........................................<Вход в аккаунт>.......................................................
@@ -142,10 +142,76 @@ public class AuthService : IAuthService
                 throw exception;
             }
         }
+        //...........................................<Информация о владельце аккаунта>...................................................
 
+        public async Task<UserDTO> GetInfoUser(Guid id, string token)
+        {
+            var searchUser = await _dbContext.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
+            var checkToken = await _dbContext.Tokens.FirstOrDefaultAsync(x => x.InvalidToken == token);
+            if (checkToken != null)
+            {
+                var ex = new Exception();
+                ex.Data.Add(StatusCodes.Status401Unauthorized.ToString(), "Данный тонен устарел");
+                throw ex;
+            }
+            if(searchUser == null)
+            {
+                var exception = new Exception();
+                exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Пользователь был не найден");
+                throw exception;
+            }
+            else
+            {
+                var searchFacultyName = _dbContext.Faculties.Where(x => x.FacultyId == searchUser.FacultyId).FirstOrDefault();
+                var user = new UserDTO
+                {
+                    BirthDate = searchUser.BirthDate,
+                    Email = searchUser.Email,
+                    Faculty = searchFacultyName.Name,
+                    FacultyId = searchUser.FacultyId,
+                    FullName = searchUser.FullName,
+                    Gender = searchUser.Gender,
+                    PhoneNumber = searchUser.PhoneNumber,
+                    Role = searchUser.Role
+                };
+                return user;
+            }
+        }
 
+        public async Task ChangeInfoAboutUser(Guid id, ChangeUserInfoDTO changeUserInfoDto, string token)
+        {
+            var chekValidToken = _dbContext.Tokens
+                .Where(x => x.InvalidToken == token)
+                .FirstOrDefault();
 
- 
+            if (chekValidToken == null)
+            {
+                var userEntity = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+                if (userEntity == null)
+                {
+                    throw new KeyNotFoundException("User not exists");
+                }
+                else
+                {
+
+                    
+                    CheckBirthDate(changeUserInfoDto.BirthDate);
+                    await CheckEmailIdentity(changeUserInfoDto.Email);
+
+                    userEntity.FullName = changeUserInfoDto.Name;
+                    userEntity.BirthDate = changeUserInfoDto.BirthDate;
+                    userEntity.PhoneNumber = changeUserInfoDto.Phone;
+                    userEntity.Email = changeUserInfoDto.Email;
+
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                throw new UnauthorizedAccessException("Token is already invalid");
+            }
+        }
 
         //..............................<Удаление пробелов и верхнего регистра>............................................
 

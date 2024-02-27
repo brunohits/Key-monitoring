@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Key_monitoring.Servises
 {
 
-    public class KeyService
+    public class KeyService: IKeyService
     {
 
         private ApplicationDbContext _dbContext;
@@ -56,35 +56,38 @@ namespace Key_monitoring.Servises
         public async Task<KeyListDTO> GetList(int page, int size)
         {
             var allKeys = await _dbContext.Keys.ToListAsync();
-            if((page - 1) * size + 1 > allKeys.Count) 
+            if ((page - 1) * size + 1 > allKeys.Count)
             {
                 throw new ArgumentException("To big pag");
             }
             allKeys = allKeys.Skip((page - 1) * size).Take(size).ToList();
 
             var KeyList = new KeyListDTO();
-            foreach(var key in allKeys)
+            foreach (var key in allKeys)
             {
                 string stat;
-                if(key.Owner == null)
+                if (key.Owner == null)
                 {
-                    stat = "Open";
+                    stat = "Available";
                 }
                 else
                 {
-                    stat = "Close";
+                    stat = "Used";
                 }
                 Guid? ownID;
-                string ownName;
-                if(key.Owner == null)
+                string? ownName;
+                RoleEnum? ownRole;
+                if (key.Owner == null)
                 {
                     ownID = null;
                     ownName = null;
+                    ownRole = null;
                 }
                 else
                 {
                     ownID = key.Owner.Id;
                     ownName = key.Owner.FullName;
+                    ownRole = key.Owner.Role;
                 }
                 KeyList.List.Add(new KeyListElementDTO
                 {
@@ -93,7 +96,8 @@ namespace Key_monitoring.Servises
                     CabinetName = key.CabinetName,
                     KeyStatus = stat,
                     OwnerId = ownID,
-                    OwnerName = ownName
+                    OwnerName = ownName,
+                    OwnerRole = ownRole
                 });
             }
             KeyList.size = size;
@@ -103,23 +107,25 @@ namespace Key_monitoring.Servises
             return KeyList;
         }
 
+        /*
+        Переделываю под заявки
         public async Task<List<KeyFullModelDTO>> GetKeyInfo(Guid id, DateTime start, DateTime finish)
         {
             var allpairs = await _dbContext.Raspisanies.Where(x => x.PairStart >= start && x.PairStart <= finish).ToListAsync();
-            if(allpairs.Count == 0 || allpairs == null) 
+            if (allpairs.Count == 0 || allpairs == null)
             {
                 throw new ArgumentException("To big pag");
             }
             var fullKey = new List<KeyFullModelDTO>();
-            foreach (var pair in allpairs) 
+            foreach (var pair in allpairs)
             {
-                var reserv = await _dbContext.Reservations.FirstOrDefaultAsync(x => x.key.Id == id && x.pair ==  pair);
+                var reserv = await _dbContext.Reservations.FirstOrDefaultAsync(x => x.key.Id == id && x.pair == pair);
                 var keyData = new KeyFullModelDTO
                 {
                     PairStart = pair.PairStart,
                     status = ""
                 };
-                if(reserv == null)
+                if (reserv == null)
                 {
                     keyData.status = "open";
                     keyData.userId = null;
@@ -135,15 +141,16 @@ namespace Key_monitoring.Servises
             }
             return fullKey;
         }
+        */
 
         public async Task<Boolean> ChangeKeyStatus(Guid keyId, Guid? userId)
         {
             var key = await _dbContext.Keys.FirstOrDefaultAsync(x => x.Id == keyId);
-            if(key == null)
+            if (key == null)
             {
                 throw new ArgumentException("wrong key Id");
             }
-            if(userId == null)
+            if (userId == null)
             {
                 key.Owner = null;
                 _dbContext.Keys.Update(key);
@@ -152,7 +159,7 @@ namespace Key_monitoring.Servises
             else
             {
                 var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
-                if(user == null) 
+                if (user == null)
                 {
                     throw new ArgumentException("wrong user Id");
                 }
