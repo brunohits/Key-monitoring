@@ -4,5 +4,5 @@ namespace Key_monitoring.Interfaces;
 
 public interface IUser
 {
-    Task<NameWithPaginationDTO> SearchUser(NameWithPaginationDTO name);
+    Task<FullResponseDTO> SearchUser(NameAndPaginGetDTO specialityGetDTO);
 }

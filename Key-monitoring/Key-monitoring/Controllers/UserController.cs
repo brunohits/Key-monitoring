@@ -14,31 +14,22 @@ public class UserController : ControllerBase
     {
         _user = user;
     }
-
-
     [HttpGet("Search/Users")]
-    public async Task<IActionResult> SearchUser(NameWithPaginationDTO Name)
+    public async Task<IActionResult> specialityGet([FromQuery] NameAndPaginGetDTO specialityGetDTO)
     {
         try
         {
-            var result = _user.SearchUser(Name);
+            var result = await _user.SearchUser(specialityGetDTO);
             return Ok(result);
         }
-        catch(Exception ex)
+        catch (BadHttpRequestException ex)
         {
-            if (ex.Data.Contains(StatusCodes.Status400BadRequest.ToString()))
-            {
-                return BadRequest(ex.Data[StatusCodes.Status400BadRequest.ToString()]);
-            }
-            else if (ex.Data.Contains(StatusCodes.Status404NotFound.ToString()))
-            {
-                return NotFound(ex.Data[StatusCodes.Status404NotFound.ToString()]);
-            }
-            else if (ex.Data.Contains(StatusCodes.Status401Unauthorized.ToString()))
-            {
-                return Unauthorized(StatusCodes.Status401Unauthorized.ToString());
-            }
+            return BadRequest(ex.Message);
         }
-        return StatusCode(500, "Внутренняя ошибка сервера.");
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            return BadRequest("An error occurred while processing your request.");
+        }
     }
 }

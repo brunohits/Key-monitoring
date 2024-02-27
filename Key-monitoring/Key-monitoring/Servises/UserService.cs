@@ -13,58 +13,66 @@ public class UserService : IUser
     {
         _dbContext = dbContext;
     }
-    public async Task<NameWithPaginationDTO> SearchUser(NameWithPaginationDTO nameWithPagination)
+
+    public async Task<FullResponseDTO> SearchUser(NameAndPaginGetDTO info)
     {
-        
         const int maxPageSize = 15038;
-        if (nameWithPagination.Pagination.Page == null)
+
+        if (info.Page == null)
         {
-            nameWithPagination.Pagination.Page = 1;
-        }
-        if (nameWithPagination.Pagination.Size == null)
-        {
-            nameWithPagination.Pagination.Size = 5;
+            info.Page = 1;
         }
 
-        if (nameWithPagination.Pagination.Page <= 0 || nameWithPagination.Pagination.Size <= 0)
+        if (info.Size == null)
+        {
+            info.Size = 5;
+        }
+
+        if (info.Page <= 0 || info.Size <= 0)
         {
             throw new BadHttpRequestException("Page and Size should be greater than zero.");
         }
-        var query = _dbContext.Users.AsQueryable();
-        if (nameWithPagination.ListName != null && nameWithPagination.ListName.Any())
-        {
-            query = query.Where(s => s.FullName.ToUpper().Contains(nameWithPagination.ListName.First().Name.ToUpper()));
-        }
 
+        var query = _dbContext.Users
+            .Where(u => string.IsNullOrWhiteSpace(info.Name) || u.FullName.Contains(info.Name))
+            .Select(u => new UserNameDTO
+            {
+                Name = u.FullName
+            });
 
         var totalCount = await query.CountAsync();
 
-        if (nameWithPagination.Pagination.Size > maxPageSize || nameWithPagination.Pagination.Page > (totalCount + nameWithPagination.Pagination.Size - 1) / nameWithPagination.Pagination.Size)
-        {
-            throw new BadHttpRequestException("Invalid Page or Size value.");
-        }
-
-        var names = await query
-            .Skip((int)((nameWithPagination.Pagination.Page - 1) * nameWithPagination.Pagination.Size))
-            .Take((int)nameWithPagination.Pagination.Size)
+        var userModels = await query
+            .Skip((int)((info.Page - 1) * info.Size))
+            .Take((int)info.Size)
             .ToListAsync();
 
-        var Name = names.Select(s => new ListNameDTO
+        var nameDtosDTO = userModels.Select(s => new UserNameDTO
         {
-            Name = s.FullName,
+            Name = s.Name,
         }).ToList();
 
         var pagination = new PaginationDTO
         {
-            Size = nameWithPagination.Pagination.Size,
+            Size = info.Size,
             Count = totalCount,
-            Page = nameWithPagination.Pagination.Page
+            Current = info.Page
         };
 
-        return new NameWithPaginationDTO
+        if (totalCount == 0)
         {
-            ListName = Name,
+            return new FullResponseDTO
+            {
+                Name = new List<UserNameDTO>(),
+                Pagination = pagination
+            };
+        }
+
+        return new FullResponseDTO
+        {
+            Name = nameDtosDTO,
             Pagination = pagination
         };
     }
+
 }
