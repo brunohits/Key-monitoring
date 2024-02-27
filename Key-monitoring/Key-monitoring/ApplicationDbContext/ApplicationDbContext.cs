@@ -10,6 +10,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<FacultyModel> Faculties { get; set; }
     public DbSet<KeyModel> Keys { get; set; }
     public DbSet<ScheduleModel> Schedule {  get; set; }
+    public DbSet<ApplicationModel> Applications { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

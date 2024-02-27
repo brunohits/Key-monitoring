@@ -107,11 +107,10 @@ namespace Key_monitoring.Servises
             return KeyList;
         }
 
-        /*
-        Переделываю под заявки
+
         public async Task<List<KeyFullModelDTO>> GetKeyInfo(Guid id, DateTime start, DateTime finish)
         {
-            var allpairs = await _dbContext.Raspisanies.Where(x => x.PairStart >= start && x.PairStart <= finish).ToListAsync();
+            var allpairs = await _dbContext.Schedule.Where(x => x.PairStart >= start && x.PairStart <= finish).ToListAsync();
             if (allpairs.Count == 0 || allpairs == null)
             {
                 throw new ArgumentException("To big pag");
@@ -119,7 +118,7 @@ namespace Key_monitoring.Servises
             var fullKey = new List<KeyFullModelDTO>();
             foreach (var pair in allpairs)
             {
-                var reserv = await _dbContext.Reservations.FirstOrDefaultAsync(x => x.key.Id == id && x.pair == pair);
+                var reserv = await _dbContext.Applications.FirstOrDefaultAsync(x => x.KeyId == id && x.ScheduleId == pair.Id);
                 var keyData = new KeyFullModelDTO
                 {
                     PairStart = pair.PairStart,
@@ -134,14 +133,13 @@ namespace Key_monitoring.Servises
                 else
                 {
                     keyData.status = "reserved";
-                    keyData.userId = reserv.user.Id;
-                    keyData.userName = reserv.user.FullName;
+                    keyData.userId = reserv.UserId;
+                    keyData.userName = reserv.User.FullName;
                 }
                 fullKey.Add(keyData);
             }
             return fullKey;
         }
-        */
 
         public async Task<Boolean> ChangeKeyStatus(Guid keyId, Guid? userId)
         {

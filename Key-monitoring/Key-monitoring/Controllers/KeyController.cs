@@ -50,11 +50,11 @@ namespace Key_monitoring.Controllers
 
         [HttpGet]
         [Route("KeyList")]
-        public async Task<IActionResult> KeyList([FromHeader] int page, [FromHeader] int size)
+        public async Task<IActionResult> KeyList([FromHeader] PaginationReqDTO pag)
         {
             try
             {
-                return Ok(await _keyService.GetList(page, size));
+                return Ok(await _keyService.GetList(pag.Page, pag.Size));
             }
             catch (Exception ex)
             {
@@ -65,11 +65,11 @@ namespace Key_monitoring.Controllers
 
         [HttpGet]
         [Route("Key")]
-        public async Task<IActionResult> KeyInfo([FromHeader] Guid id, [FromBody] DateTime start, [FromBody] DateTime finish)
+        public async Task<IActionResult> KeyInfo([FromHeader] Guid id, [FromBody] DateDTO dateLine)
         {
             try
             {
-                return Ok(await _keyService.GetKeyInfo(id, start, finish));
+                return Ok(await _keyService.GetKeyInfo(id, dateLine.Start, dateLine.Finish));
             }
             catch (Exception ex)
             {
@@ -80,11 +80,11 @@ namespace Key_monitoring.Controllers
 
         [HttpPost]
         [Route("KeyStatus")]
-        public async Task<IActionResult> KeyStatusChange([FromBody] Guid keyId, [FromBody] Guid? userId)
+        public async Task<IActionResult> KeyStatusChange([FromBody] KeyStatusDto keyStatus)
         {
             try
             {
-                var result = await _keyService.ChangeKeyStatus(keyId, userId);
+                var result = await _keyService.ChangeKeyStatus(keyStatus.KeyId, keyStatus.UserId);
                 return Ok();
             }
             catch (Exception ex)
