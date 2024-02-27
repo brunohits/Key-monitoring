@@ -20,7 +20,9 @@ public class ApplicationModel
 
     public required Guid KeyId { get; set; }
 
-    public required ScheduleModel Key { get; set; }
+    public required KeyModel Key { get; set; }
 
-    public required ApplicationStatusEnum status { get; set; }
+    public required bool Repetitive { get; set; }
+
+    public required ApplicationStatusEnum Status { get; set; }
 }

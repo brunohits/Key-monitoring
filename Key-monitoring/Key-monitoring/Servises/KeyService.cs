@@ -100,9 +100,13 @@ namespace Key_monitoring.Servises
                     OwnerRole = ownRole
                 });
             }
-            KeyList.size = size;
-            KeyList.count = KeyList.List.Count;
-            KeyList.current = page;
+            var pag = new PaginationDTO
+            {
+                Size = size,
+                Count = KeyList.List.Count,
+                Current = page
+            };
+            KeyList.Pagination = pag;
 
             return KeyList;
         }

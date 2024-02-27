@@ -17,9 +17,9 @@ namespace Key_monitoring.Controllers
     public class KeyController : ControllerBase
     {
         //создать интерфейс
-        private readonly KeyService _keyService;
+        private readonly IKeyService _keyService;
 
-        public KeyController(KeyService keyService)
+        public KeyController(IKeyService keyService)
         {
             _keyService = keyService;
         }

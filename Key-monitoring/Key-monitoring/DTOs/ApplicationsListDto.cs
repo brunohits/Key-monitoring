@@ -4,9 +4,9 @@ using System.Drawing;
 
 namespace Key_monitoring.DTOs;
 
-public class KeyListDTO
+public class ApplicationsListDto
 {
-    public List<KeyListElementDTO> List {  get; set; }
+    public List<ApplicationsListElementDTO> List { get; set; }
 
     public PaginationDTO Pagination { get; set; }
 }
