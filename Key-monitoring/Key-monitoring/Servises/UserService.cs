@@ -37,6 +37,7 @@ public class UserService : IUser
             .Where(u => string.IsNullOrWhiteSpace(info.Name) || u.FullName.Contains(info.Name))
             .Select(u => new UserNameDTO
             {
+                Id = u.Id,
                 Name = u.FullName,
                 Email = u.Email,
                 CreateDate = u.CreateTime,
@@ -45,6 +46,7 @@ public class UserService : IUser
             });
 
         var totalCount = await query.CountAsync();
+        var totalPages = (int)Math.Ceiling((decimal)((double)totalCount / info.Size));
 
         var userModels = await query
             .Skip((int)((info.Page - 1) * info.Size))
@@ -53,6 +55,7 @@ public class UserService : IUser
 
         var nameDtosDTO = userModels.Select(s => new UserNameDTO
         {
+            Id = s.Id,
             Name = s.Name,
             Email = s.Email,
             CreateDate = s.CreateDate,
@@ -63,7 +66,7 @@ public class UserService : IUser
         var pagination = new PaginationDTO
         {
             Size = info.Size,
-            Count = totalCount,
+            Count = totalPages,
             Current = info.Page
         };
 
