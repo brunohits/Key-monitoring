@@ -1,3 +1,7 @@
+var token1 = localStorage.getItem('token');
+var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMDA4ZWMyYTMtMzQyYi00ZWE3LWFhMWItYWIwNGMzNDU4ZDRmIiwibmJmIjoxNzA5MTExNDUwLCJleHAiOjE3MDkxMTUwNTAsImlzcyI6IktleS1Nb25pdG9yaW5nIiwiYXVkIjoiU3R1ZGVudEFuZFRlYWNoZXIifQ.pdTgYt7PDN7LNsRKDt-hZcs0vn0zRx0HFJB1GWsTU70"
+console.log(token)
+
 async function get(url) {
     return fetch(url, {
       method: 'GET',
@@ -40,7 +44,7 @@ async function get(url) {
         
         if (item.role === 'Student' || item.role === 'Teacher') {
             tableHTML += `
-                <a href="#" title="${item.role === 'Student' ? 'Сменить роль на преподавателя' : 'Сменить роль на студента'}">
+                <a href="#" onclick="changeRole('${item.id}', '${item.role}')" title="${item.role === 'Student' ? 'Сменить роль на преподавателя' : 'Сменить роль на студента'}">
                     <img src="change_role(1).png" alt="change_role.png" class="img-fluid" width="8%">
                 </a>`;
         }
@@ -170,3 +174,39 @@ function updatePagination(maxPagination) {
   
     searchPatients(page);
   });
+
+  
+//----------------------------------------------------------------------
+
+function changeRole(id, currentRole) {
+  console.log(`Изменение роли для пользователя с id ${id}, текущая роль: ${currentRole}`);
+  if (currentRole === 'Student')
+    put(id, 'Teacher', token);
+    if (currentRole === 'Teacher')
+    put(id, 'Student', token);
+}
+
+//----------------------------------------------------------------------
+
+async function put(id, role, token) {
+  const url = `https://localhost:7266/api/account/Change/Role?roleEnum=${role}&idUser=${id}`;
+  console.log(token);
+  return fetch(url, {
+      method: 'PUT',
+      headers: new Headers({
+          'Content-Type': 'application/json',
+          "Authorization": `Bearer ${token}`
+      })
+  })
+      .then(response => response.json())
+      .then(result => {
+          console.log(result);
+          const errorMessage = document.getElementById('errorMessage');
+          errorMessage.textContent = '';
+          console.log(result);
+      })
+      .catch(error => {
+          console.error('Ошибка', error);
+          window.location.reload(true);
+      });
+}
