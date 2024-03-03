@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Страница управления заявками</title>
+    <title>Расписание</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -16,6 +16,23 @@
     margin-top: 0;
     margin-bottom: 0;
     }
+
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    th, td {
+        width: 14.28%; /* Равномерно распределяем ширину на 7 дней (100% / 7) */
+        font-size: 12px; /* font-size: 12px; */
+        overflow-wrap: normal;
+    }
+    div{
+        overflow: hidden;
+}
+
+
+
 </style>
 <body>
 
@@ -23,7 +40,7 @@
 <nav class="navbar navbar-expand navbar-light bg-white border static-top justify-content-between">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <img src="ЛОГОТИП ТГУ.png" alt="логотип" class="img-fluid" width="50%">
+            <img src="/ЛОГОТИП ТГУ.png" alt="логотип" class="img-fluid" width="50%">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -61,7 +78,7 @@
 
         <!-- Main Content-->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 shadow rounded">
-            <h2 class="mb-4  mt-5 ms-4">Статусы ключей</h2>
+            <h2 class="mb-4  mt-5 ms-4">Ключи</h2>
             <!--<table class="table table-striped table-sm mt-4 ms-4">
                 <thead>
                     <tr>
@@ -89,6 +106,11 @@
             
             <div class="mx-0">
                 <div class="row mx-3">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="btn" onclick="slideDate('left')">&#10094;</div>
+                        <p id="currentDate" class="my-0"></p>
+                        <div class="btn" onclick="slideDate('right')">&#10095;</div>
+                    </div>
                     <div class="container mt-2 col-12 col-lg-6 px-0">
                         <div class="p-1 blue rounded shadow-sm py-2 mx-1">
                             <div class="d-flex align-items-center">
@@ -98,7 +120,113 @@
                                     <h6 class="bg-warning-subtle rounded text-warning fw-bold px-1">На руках&nbsp;у</h6>
                                     <font class="px-1" color="#DFDFDF">Срибный Григорий Романович</font>
                                 </div>
+                                <a class="btn ms-auto" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                    &#11167;
+                                  </a>
                             </div>
+                            <div class="collapse" id="collapseExample">
+                                <div class="card"> <!--card-body-->
+                                    <div>
+                                    <table class="table table-bordered table-sm my-0">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Время</th>
+                                            <th scope="col">Пн</th>
+                                            <th scope="col">Вт</th>
+                                            <th scope="col">Ср</th>
+                                            <th scope="col">Чт</th>
+                                            <th scope="col">Пт</th>
+                                            <th scope="col">Сб</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>8:45</td>
+                                            <td>
+                                                <div class="p-1 rounded py-2 mx-1" style="background-color:rgb(255, 239, 91)">
+                                                    Змеев Денис Олегович
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="p-1 rounded py-2 mx-1" style="background-color:lightgreen">
+                                                    Никитин Артём Станиславович
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>10:35</td>
+                                            <td>
+                                                <div class="p-1 rounded py-2 mx-1" style="background-color:lightgreen">
+                                                    Срибный Григорий Романович
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>12:25</td>
+                                            <td>
+                                                <div class="p-1 rounded py-2 mx-1" style="background-color:rgb(255, 239, 91)">
+                                                    Змеев Денис Олегович
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>14:45</td>
+                                            <td>
+                                                <div class="p-1 rounded py-2 mx-1" style="background-color:rgb(255, 239, 91)">
+                                                    Змеев Денис Олегович
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <div class="p-1 rounded py-2 mx-1" style="background-color:lightgreen">
+                                                    Срибный Григорий Романович
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>16:35</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>18:25</td>
+                                            <td>
+                                                <div class="p-1 rounded py-2 mx-1" style="background-color:rgb(255, 239, 91)">
+                                                    Змеев Денис Олегович
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        </tbody>
+                                    </table> 
+                                </div>
+                                </div>
+                              </div>
                         </div>
                     </div>
                     <div class="container mt-2 col-12 col-lg-6 px-0">
@@ -188,7 +316,7 @@
                 </div>
             </div>
 
-            <!-- Pagination -->
+            <!-- Pagination 
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center mt-4">
                     <li class="page-item disabled">
@@ -201,12 +329,41 @@
                         <a class="page-link" href="#">Next</a>
                     </li>
                 </ul>
-            </nav>
+            </nav>-->
         </main>
     </div>
 </div>
 
 <!-- Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    let currentDate = new Date(); // Инициализируем текущую дату
+    updateDate(); // Обновляем отображение текущей недели
+
+    function slideDate(direction) {
+        if (direction === 'left') {
+            currentDate.setDate(currentDate.getDate() - 7); // Сдвигаем дату на 7 дней влево
+        } else {
+            currentDate.setDate(currentDate.getDate() + 7); // Сдвигаем дату на 7 дней вправо
+        }
+        updateDate(); // Обновляем отображение текущей недели
+    }
+
+    function updateDate() {
+        let startOfWeek = new Date(currentDate);
+        startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1)); // Начало текущей недели
+
+        let endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6); // Конец текущей недели
+
+        let options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        let formattedStart = startOfWeek.toLocaleDateString('ru-RU', options); // Форматируем начало недели
+        let formattedEnd = endOfWeek.toLocaleDateString('ru-RU', options); // Форматируем конец недели
+
+        document.getElementById("currentDate").textContent = formattedStart + " - " + formattedEnd; // Обновляем отображение текущей недели
+    }
+</script>
+
 </body>
 </html>
