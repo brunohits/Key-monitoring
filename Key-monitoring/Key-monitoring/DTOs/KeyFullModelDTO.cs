@@ -9,4 +9,5 @@ public class KeyFullModelDTO
     public string status { get; set; }
     public Guid? userId { get; set; }
     public string? userName { get; set; }
+    public string? role { get; set; }
 }

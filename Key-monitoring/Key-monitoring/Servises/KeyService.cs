@@ -93,39 +93,31 @@ namespace Key_monitoring.Servises
                 {
                     Id = key.Id,
                     CabinetNumber = key.CabinetNumber,
-                    CabinetName = key.CabinetName,
                     KeyStatus = stat,
                     OwnerId = ownID,
                     OwnerName = ownName,
                     OwnerRole = ownRole
                 });
             }
-            var pag = new PaginationDTO
-            {
-                Size = size,
-                Count = KeyList.List.Count,
-                Current = page
-            };
-            KeyList.Pagination = pag;
 
             return KeyList;
         }
 
 
-        public async Task<List<KeyFullModelDTO>> GetKeyInfo(Guid id, DateTime start, DateTime finish)
+        public async Task<KeySchInfoDTO> GetKeyInfo(Guid id, DateTime start)
         {
-            var allpairs = await _dbContext.Schedule.Where(x => x.PairStart >= start && x.PairStart <= finish).ToListAsync();
-            if (allpairs.Count == 0 || allpairs == null)
+            var allpairs = await _dbContext.Schedule.Where(x => x.PairStart >= start).Take(36).ToListAsync();
+            if (allpairs.Count == 0 || allpairs == null || allpairs.Count < 36)
             {
-                throw new ArgumentException("To big pag");
+                throw new ArgumentException("Wrong week data");
             }
-            var fullKey = new List<KeyFullModelDTO>();
-            foreach (var pair in allpairs)
+            var Mon = new List<KeyFullModelDTO>();
+            for (int i = 0; i < 6; ++i)
             {
-                var reserv = await _dbContext.Applications.FirstOrDefaultAsync(x => x.KeyId == id && x.ScheduleId == pair.Id);
+                var reserv = await _dbContext.Applications.FirstOrDefaultAsync(x => x.KeyId == id && x.ScheduleId == allpairs[i].Id && x.Status == ApplicationStatusEnum.Approved);
                 var keyData = new KeyFullModelDTO
                 {
-                    PairStart = pair.PairStart,
+                    PairStart = allpairs[i].PairStart,
                     status = ""
                 };
                 if (reserv == null)
@@ -133,16 +125,152 @@ namespace Key_monitoring.Servises
                     keyData.status = "open";
                     keyData.userId = null;
                     keyData.userName = null;
+                    keyData.role = null;
                 }
                 else
                 {
                     keyData.status = "reserved";
                     keyData.userId = reserv.UserId;
                     keyData.userName = reserv.User.FullName;
+                    keyData.role = reserv.User.Role.ToString();
                 }
-                fullKey.Add(keyData);
+                Mon.Add(keyData);
             }
-            return fullKey;
+            var Tue = new List<KeyFullModelDTO>();
+            for (int i = 6; i < 12; ++i)
+            {
+                var reserv = await _dbContext.Applications.FirstOrDefaultAsync(x => x.KeyId == id && x.ScheduleId == allpairs[i].Id && x.Status == ApplicationStatusEnum.Approved);
+                var keyData = new KeyFullModelDTO
+                {
+                    PairStart = allpairs[i].PairStart,
+                    status = ""
+                };
+                if (reserv == null)
+                {
+                    keyData.status = "open";
+                    keyData.userId = null;
+                    keyData.userName = null;
+                    keyData.role = null;
+                }
+                else
+                {
+                    keyData.status = "reserved";
+                    keyData.userId = reserv.UserId;
+                    keyData.userName = reserv.User.FullName;
+                    keyData.role = reserv.User.Role.ToString();
+                }
+                Tue.Add(keyData);
+            }
+            var Wed = new List<KeyFullModelDTO>();
+            for (int i = 12; i < 18; ++i)
+            {
+                var reserv = await _dbContext.Applications.FirstOrDefaultAsync(x => x.KeyId == id && x.ScheduleId == allpairs[i].Id && x.Status == ApplicationStatusEnum.Approved);
+                var keyData = new KeyFullModelDTO
+                {
+                    PairStart = allpairs[i].PairStart,
+                    status = ""
+                };
+                if (reserv == null)
+                {
+                    keyData.status = "open";
+                    keyData.userId = null;
+                    keyData.userName = null;
+                    keyData.role = null;
+                }
+                else
+                {
+                    keyData.status = "reserved";
+                    keyData.userId = reserv.UserId;
+                    keyData.userName = reserv.User.FullName;
+                    keyData.role = reserv.User.Role.ToString();
+                }
+                Wed.Add(keyData);
+            }
+            var Thu = new List<KeyFullModelDTO>();
+            for (int i = 18; i < 24; ++i)
+            {
+                var reserv = await _dbContext.Applications.FirstOrDefaultAsync(x => x.KeyId == id && x.ScheduleId == allpairs[i].Id && x.Status == ApplicationStatusEnum.Approved);
+                var keyData = new KeyFullModelDTO
+                {
+                    PairStart = allpairs[i].PairStart,
+                    status = ""
+                };
+                if (reserv == null)
+                {
+                    keyData.status = "open";
+                    keyData.userId = null;
+                    keyData.userName = null;
+                    keyData.role = null;
+                }
+                else
+                {
+                    keyData.status = "reserved";
+                    keyData.userId = reserv.UserId;
+                    keyData.userName = reserv.User.FullName;
+                    keyData.role = reserv.User.Role.ToString();
+                }
+                Thu.Add(keyData);
+            }
+            var Fri = new List<KeyFullModelDTO>();
+            for (int i = 24; i < 30; ++i)
+            {
+                var reserv = await _dbContext.Applications.FirstOrDefaultAsync(x => x.KeyId == id && x.ScheduleId == allpairs[i].Id && x.Status == ApplicationStatusEnum.Approved);
+                var keyData = new KeyFullModelDTO
+                {
+                    PairStart = allpairs[i].PairStart,
+                    status = ""
+                };
+                if (reserv == null)
+                {
+                    keyData.status = "open";
+                    keyData.userId = null;
+                    keyData.userName = null;
+                    keyData.role = null;
+                }
+                else
+                {
+                    keyData.status = "reserved";
+                    keyData.userId = reserv.UserId;
+                    keyData.userName = reserv.User.FullName;
+                    keyData.role = reserv.User.Role.ToString();
+                }
+                Fri.Add(keyData);
+            }
+            var Sat = new List<KeyFullModelDTO>();
+            for (int i = 30; i < 36; ++i)
+            {
+                var reserv = await _dbContext.Applications.FirstOrDefaultAsync(x => x.KeyId == id && x.ScheduleId == allpairs[i].Id && x.Status == ApplicationStatusEnum.Approved);
+                var keyData = new KeyFullModelDTO
+                {
+                    PairStart = allpairs[i].PairStart,
+                    status = ""
+                };
+                if (reserv == null)
+                {
+                    keyData.status = "open";
+                    keyData.userId = null;
+                    keyData.userName = null;
+                    keyData.role = null;
+                }
+                else
+                {
+                    keyData.status = "reserved";
+                    keyData.userId = reserv.UserId;
+                    keyData.userName = reserv.User.FullName;
+                    keyData.role = reserv.User.Role.ToString();
+                }
+                Sat.Add(keyData);
+            }
+            var retData = new KeySchInfoDTO
+            {
+                mn = Mon,
+                tu = Tue,
+                we = Wed,
+                th = Thu,
+                fr = Fri,
+                st = Sat
+            };
+            return retData;
         }
 
         public async Task<Boolean> ChangeKeyStatus(Guid keyId, Guid? userId)

@@ -24,6 +24,36 @@ namespace Key_monitoring.Controllers
             _applicationService = applicationService;
         }
 
+        [HttpPost]
+        [Route("application")]
+        public async Task<IActionResult> ApplicationCreate([FromBody] ApplicationCreateDTO data)
+        {
+            try
+            {
+                return Ok(await _applicationService.CreateApplication(data));
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("application/status")]
+        public async Task<IActionResult> ApplicationChangeStatus([FromBody] ApplicationStatusDTO data)
+        {
+            try
+            {
+                return Ok(await _applicationService.ChangeApplicationStatus(data));
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpGet]
         [Route("applicationsList")]
@@ -32,6 +62,52 @@ namespace Key_monitoring.Controllers
             try
             {
                 var result = await _applicationService.GetApplicationsList(status, role, cabinetNumber, partOfName, pagination);
+                if (result != null)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("applicationsList/User")]
+        public async Task<IActionResult> ApplicationsListUser([FromBody] ApplicationsListUserDTO data)
+        {
+            try
+            {
+                var result = await _applicationService.GetApplicationsListUser(data);
+                if (result != null)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("application/delete")]
+        public async Task<IActionResult> ApplicationDelete([FromBody] ApplicationDeleteDTO data)
+        {
+            try
+            {
+                var result = await _applicationService.ApplicationDelete(data);
                 if (result != null)
                 {
                     return Ok();

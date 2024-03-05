@@ -4,7 +4,9 @@ using System.Drawing;
 
 namespace Key_monitoring.DTOs;
 
-public class KeyListDTO
+public class ApplicationDeleteDTO
 {
-    public List<KeyListElementDTO> List {  get; set; }
+    public Guid applicationId { get; set; }
+
+    public Guid userId { get; set; }
 }

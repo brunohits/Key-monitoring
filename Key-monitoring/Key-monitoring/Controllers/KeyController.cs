@@ -69,7 +69,7 @@ namespace Key_monitoring.Controllers
         {
             try
             {
-                return Ok(await _keyService.GetKeyInfo(id, dateLine.Start, dateLine.Finish));
+                return Ok(await _keyService.GetKeyInfo(id, dateLine.Start));
             }
             catch (Exception ex)
             {

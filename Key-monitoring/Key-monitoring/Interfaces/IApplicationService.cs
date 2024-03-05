@@ -7,5 +7,9 @@ namespace Key_monitoring.Interfaces;
 
 public interface IApplicationService
 {
+    Task<Guid> ChangeApplicationStatus(ApplicationStatusDTO data);
+    Task<Guid> CreateApplication(ApplicationCreateDTO data);
     Task<ApplicationsListDto> GetApplicationsList(ApplicationStatusEnum? status, RoleEnum? role, int? cabinetNumber, string? partOfName, PaginationReqDTO pagination);
+    Task<ApplicationListForUserDTO> GetApplicationsListUser(ApplicationsListUserDTO data);
+    Task<bool> ApplicationDelete(ApplicationDeleteDTO data);
 }

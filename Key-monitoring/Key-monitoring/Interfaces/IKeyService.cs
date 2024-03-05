@@ -10,7 +10,7 @@ public interface IKeyService
 
     Task<KeyListDTO> GetList(int page, int size);
 
-    Task<List<KeyFullModelDTO>> GetKeyInfo(Guid id, DateTime start, DateTime finish);
+    Task<KeySchInfoDTO> GetKeyInfo(Guid id, DateTime start);
 
     Task<Boolean> ChangeKeyStatus(Guid keyId, Guid? userId);
 }

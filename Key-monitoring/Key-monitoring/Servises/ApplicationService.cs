@@ -33,6 +33,68 @@ namespace Key_monitoring.Servises
             _mapper = mapper;
         }
 
+        public async Task<Guid> CreateApplication(ApplicationCreateDTO data)
+        {
+            var pair = await _dbContext.Schedule.FirstOrDefaultAsync(x => x.Id == data.pairId);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == data.userId);
+            var key = await _dbContext.Keys.FirstOrDefaultAsync(x => x.Id == data.keyId);
+            if(pair == null || user == null || key == null)
+            {
+                throw new ArgumentException("Ahtung! Wrong ID");
+            }
+            var newAppl = new ApplicationModel
+            {
+                Id = Guid.NewGuid(),
+                CreateTime = DateTime.UtcNow,
+                UserId = user.Id,
+                User = user,
+                ScheduleId = pair.Id,
+                Schedule = pair,
+                KeyId = key.Id,
+                Key = key,
+                Repetitive = data.repetitive,
+                Status = ApplicationStatusEnum.UnderConsideration
+            };
+            await _dbContext.Applications.AddAsync(newAppl);
+            await _dbContext.SaveChangesAsync();
+
+            if (user.Role != RoleEnum.Student || user.Role != RoleEnum.NotСonfirmed)
+            {
+                var applList = await _dbContext.Applications.Where(x => x.ScheduleId == newAppl.ScheduleId && x.KeyId == newAppl.KeyId && x.User.Role == RoleEnum.Student).ToListAsync();
+                foreach (var applic in applList)
+                {
+                    applic.Status = ApplicationStatusEnum.Denied;
+                    _dbContext.Applications.Update(applic);
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+
+            return newAppl.Id;
+        }
+
+        public async Task<Guid> ChangeApplicationStatus(ApplicationStatusDTO data)
+        {
+            var appl = await _dbContext.Applications.FirstOrDefaultAsync(x => x.Id == data.id);
+            if (appl == null || appl.UserId != data.userID)
+            {
+                throw new ArgumentException("Ahtung! Wrong ID");
+            }
+            if(data.status == ApplicationStatusEnum.Approved)
+            {
+                var applList = await _dbContext.Applications.Where(x => x.ScheduleId == appl.ScheduleId && x.KeyId == appl.KeyId).ToListAsync();
+                foreach (var applic in applList)
+                {
+                    applic.Status = ApplicationStatusEnum.Denied;
+                    _dbContext.Applications.Update(applic);
+                    await _dbContext.SaveChangesAsync();
+                }
+            }
+            appl.Status = data.status;
+            _dbContext.Applications.Update(appl);
+            await _dbContext.SaveChangesAsync();
+            return appl.Id;
+        }
+
         public async Task<ApplicationsListDto> GetApplicationsList(ApplicationStatusEnum? status, RoleEnum? role, int? cabinetNumber, string? partOfName, PaginationReqDTO pagination)
         {
             var allAppl = await _dbContext.Applications.ToListAsync();
@@ -121,6 +183,53 @@ namespace Key_monitoring.Servises
             };
 
             return new ApplicationsListDto { List = retList, Pagination = pag };
+        }
+
+        public async Task<ApplicationListForUserDTO> GetApplicationsListUser(ApplicationsListUserDTO data)
+        {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == data.userId);
+            if (user == null)
+            {
+                throw new ArgumentException("Ahtung! Wrong ID");
+            }
+            var applications = await _dbContext.Applications.Where(x => x.User == user).ToListAsync();
+
+            if(data.status != null)
+            {
+                applications = applications.Where(x => x.Status == data.status).ToList();
+            }
+
+            var retList = new List<ApplicationsListElementDTO>();
+            foreach (var app in applications)
+            {
+                retList.Add(new ApplicationsListElementDTO
+                {
+                    Id = app.Id,
+                    date = app.CreateTime,
+                    OwnerId = app.UserId,
+                    OwnerName = app.User.FullName,
+                    OwnerRole = app.User.Role,
+                    KeyId = app.KeyId,
+                    KeyNumber = app.Key.CabinetNumber,
+                    Repetitive = app.Repetitive,
+                    PairStart = app.Schedule.PairStart,
+                    Status = app.Status
+                });
+            }
+             return new ApplicationListForUserDTO { List = retList };
+        }
+
+        public async Task<bool> ApplicationDelete(ApplicationDeleteDTO data)
+        {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == data.userId);
+            var appl = await _dbContext.Applications.FirstOrDefaultAsync(x => x.Id == data.applicationId);
+            if (user == null || appl == null || appl.UserId != data.userId)
+            {
+                throw new ArgumentException("Ahtung! Wrong ID");
+            }
+            _dbContext.Applications.Remove(appl);
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

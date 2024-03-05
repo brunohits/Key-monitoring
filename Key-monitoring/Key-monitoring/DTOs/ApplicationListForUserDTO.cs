@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace Key_monitoring.DTOs;
 
-public class KeyListDTO
+public class ApplicationListForUserDTO
 {
-    public List<KeyListElementDTO> List {  get; set; }
+    public List<ApplicationsListElementDTO> List { get; set; }
 }
