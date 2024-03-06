@@ -1,6 +1,7 @@
 ﻿using Key_monitoring.DTOs;
 using Key_monitoring.Enum;
 using Key_monitoring.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Key_monitoring.Interfaces;
 
@@ -12,5 +13,6 @@ public interface IKeyService
 
     Task<KeySchInfoDTO> GetKeyInfo(Guid id, DateTime start);
 
-    Task<Boolean> ChangeKeyStatus(Guid keyId, Guid? userId);
+    Task<bool> ChangeKeyStatus(Guid keyId, Guid? userId);
+    Task<KeyDayInfoDTO> GetKeyDayInfo(GetKeyDayInfoDTO data);
 }

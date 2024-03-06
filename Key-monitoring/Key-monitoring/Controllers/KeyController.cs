@@ -93,6 +93,21 @@ namespace Key_monitoring.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        [Route("DayInfo")]
+        public async Task<IActionResult> DayInfo([FromBody] GetKeyDayInfoDTO data)
+        {
+            try
+            {
+                return Ok(await _keyService.GetKeyDayInfo(data));
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
 

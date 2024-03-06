@@ -299,6 +299,31 @@ namespace Key_monitoring.Servises
             }
             return true;
         }
+
+        public async Task<KeyDayInfoDTO> GetKeyDayInfo(GetKeyDayInfoDTO data)
+        {
+            var pairs = await _dbContext.Schedule.Where(x => x.PairStart.ToLongDateString() == data.day.ToLongDateString()).Take(6).ToListAsync();
+            if(pairs == null || pairs.Count != 6)
+            {
+                throw new ArgumentException("Ahtung! Wrong date");
+            }
+            var statusList = new List<string>();
+            
+            foreach (var pair in pairs) 
+            {
+                var keyInfo = await _dbContext.Applications.FirstOrDefaultAsync(x => x.Schedule.PairStart == pair.PairStart && x.Status == ApplicationStatusEnum.Approved);
+                if(keyInfo == null)
+                {
+                    statusList.Add("Open");
+                }
+                else
+                {
+                    statusList.Add("Close");
+                }
+            }
+
+            return new KeyDayInfoDTO { statuses = statusList };
+        }
     }
 }
 
