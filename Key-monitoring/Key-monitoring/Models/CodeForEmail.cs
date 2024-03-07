@@ -10,4 +10,5 @@ public class CodeForEmailModel
     public Guid IdFromAdress { get; set; }
     public Guid IdToAdress { get; set; }
     public DateTime LifeOfCode { get; set; }
+    public int NumberRoom { get; set; }
 }

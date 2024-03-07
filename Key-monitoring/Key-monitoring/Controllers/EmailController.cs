@@ -14,13 +14,13 @@ public class EmailController : ControllerBase
         _email = email;
     }
     [Authorize]
-    [HttpPost("Search/Users")]
+    [HttpPost("send/email")]
 
-    public async Task<IActionResult> specialityGet(Guid id)
+    public async Task<IActionResult> SpecialityGet(Guid id, int numberRoom)
     {
         try
         {
-            bool isEmailSent = await _email.SendEmail(id, Guid.Parse(User.Identity.Name));
+            bool isEmailSent = await _email.SendEmail(id, Guid.Parse(User.Identity.Name), numberRoom);
             if (isEmailSent)
                 return Ok();
             else
@@ -34,6 +34,21 @@ public class EmailController : ControllerBase
         {
             Console.WriteLine($"An error occurred: {ex.Message}");
             return BadRequest("An error occurred while processing your request.");
+        }
+    }
+    [Authorize]
+    [HttpPost("send/code")]
+    public async Task<IActionResult> CheckCode(int number)
+    {
+        try
+        {
+            await _email.SendCode(number, Guid.Parse(User.Identity.Name));
+            return Ok();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
         }
     }
 
