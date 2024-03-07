@@ -22,6 +22,29 @@ namespace Keymonitoring.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Key_monitoring.Models.CodeForEmail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Code")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("IdFromAdress")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("IdToAdress")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("LifeOfCode")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CodeForEmails");
+                });
+
             modelBuilder.Entity("Key_monitoring.Models.FacultyModel", b =>
                 {
                     b.Property<Guid>("FacultyId")

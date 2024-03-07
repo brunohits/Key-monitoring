@@ -63,7 +63,7 @@ public class AuthService : IAuthService
             byte[] combinedBytes = new byte[36];
             Buffer.BlockCopy(saltBytes, 0, combinedBytes, 0, 16);
             Buffer.BlockCopy(passwordHashBytes, 0, combinedBytes, 16, 20);
-
+            
             string savedPasswordHash = Convert.ToBase64String(combinedBytes);
 
             await _dbContext.Users.AddAsync(new UserModel
