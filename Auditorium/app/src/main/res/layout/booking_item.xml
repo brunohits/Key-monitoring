@@ -5,35 +5,36 @@
     android:layout_height="wrap_content"
     android:background="@drawable/gradient"
     android:orientation="vertical"
-    android:paddingBottom="15dp">
+    android:paddingBottom="20dp">
 
     <TextView
-        android:id="@+id/number_of_key"
+        android:id="@+id/booking_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:fontFamily="@font/inter_bold"
         android:paddingHorizontal="20dp"
         android:paddingVertical="10dp"
-        android:text="TextView"
+        android:text="8:45-10:35"
         android:textSize="17sp" />
 
     <TextView
-        android:id="@+id/status"
+        android:id="@+id/booking_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:paddingHorizontal="20dp"
         android:paddingVertical="10dp"
-        android:text="TextView" />
+        android:text="свободна"
+        android:textColor="#4CAF50"/>
 
     <Button
-        android:id="@+id/button_details"
+        android:id="@+id/booking_button"
         android:layout_width="212dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:backgroundTint="#1E90FF"
         android:paddingHorizontal="20dp"
-        android:text="Отменить" />
+        android:text="Заброрировать" />
 
 </LinearLayout>

@@ -1,7 +1,9 @@
 package com.example.auditorium
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -12,6 +14,8 @@ class RequestActivity : AppCompatActivity() {
 
         val requestList:RecyclerView = findViewById(R.id.request_list)
         val request = arrayListOf<Request>()
+
+
 
         request.add(Request(1,"220 аудитория ","на рассмотрении"))
         request.add(Request(2,"222 аудитория ","одоброено"))
@@ -25,5 +29,13 @@ class RequestActivity : AppCompatActivity() {
 
         requestList.layoutManager = LinearLayoutManager(this)
         requestList.adapter = RequestAdapter(request,this)
+
+        val  button: Button = findViewById(R.id.button_make_request)
+
+        button.setOnClickListener {
+            val intent = Intent(this@RequestActivity, AuditoryActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }
