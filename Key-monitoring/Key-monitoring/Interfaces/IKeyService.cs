@@ -7,12 +7,12 @@ namespace Key_monitoring.Interfaces;
 
 public interface IKeyService
 { 
-    Task<Exception?> CreateKey(KeyCreateDTO newKey);
+    Task<Guid> CreateKey(KeyCreateDTO newKey);
 
-    Task<KeyListDTO> GetList(int page, int size);
+    Task<KeyListDTO> GetList();
 
     Task<KeySchInfoDTO> GetKeyInfo(Guid id, DateTime start);
 
-    Task<bool> ChangeKeyStatus(Guid keyId, Guid? userId);
+    Task<KeyStatusEnum> ChangeKeyStatus(Guid keyId, Guid? userId);
     Task<KeyDayInfoDTO> GetKeyDayInfo(GetKeyDayInfoDTO data);
 }

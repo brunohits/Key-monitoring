@@ -26,20 +26,12 @@ namespace Key_monitoring.Controllers
 
 
         [HttpPost]
-        [Route("create")]
+        [Route("CreateKey")]
         public async Task<IActionResult> CreateKey([FromBody] KeyCreateDTO newKey)
         {
             try
             {
-                var result = await _keyService.CreateKey(newKey);
-                if (result != null)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest(result);
-                }
+                return Ok(await _keyService.CreateKey(newKey));
             }
             catch (Exception ex)
             {
@@ -49,53 +41,49 @@ namespace Key_monitoring.Controllers
         }
 
         [HttpGet]
-        [Route("KeyList")]
-        public async Task<IActionResult> KeyList([FromHeader] PaginationReqDTO pag)
+        [Route("GetFullKeyList")]
+        public async Task<IActionResult> KeyList()
         {
             try
             {
-                return Ok(await _keyService.GetList(pag.Page, pag.Size));
+                return Ok(await _keyService.GetList());
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpGet]
-        [Route("Key")]
-        public async Task<IActionResult> KeyInfo([FromHeader] Guid id, [FromBody] DateDTO dateLine)
+        [Route("GetKeyInfoOnWeek")]
+        public async Task<IActionResult> KeyInfo([FromBody] GetKeyInfoDTO infoData)
         {
             try
             {
-                return Ok(await _keyService.GetKeyInfo(id, dateLine.Start));
+                return Ok(await _keyService.GetKeyInfo(infoData.id, infoData.Start));
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpPost]
-        [Route("KeyStatus")]
+        [Route("ChangeKeyStatus")]
         public async Task<IActionResult> KeyStatusChange([FromBody] KeyStatusDto keyStatus)
         {
             try
             {
-                var result = await _keyService.ChangeKeyStatus(keyStatus.KeyId, keyStatus.UserId);
-                return Ok();
+                return Ok(await _keyService.ChangeKeyStatus(keyStatus.KeyId, keyStatus.UserId));
             }
             catch (Exception ex)
             {
-
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpGet]
-        [Route("DayInfo")]
+        [Route("GetKeyInfoOnDayInfo")]
         public async Task<IActionResult> DayInfo([FromBody] GetKeyDayInfoDTO data)
         {
             try

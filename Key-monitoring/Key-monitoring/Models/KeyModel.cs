@@ -17,10 +17,6 @@ public class KeyModel
     [MinLength(1)]
     public int CabinetNumber { get; set; }
 
-    [Required]
-    [MinLength(1)]
-    public string? CabinetName { get; set; }
-
     public Guid? OwnerId { get; set; }
     public UserModel? Owner { get; set; }
 }
