@@ -35,64 +35,124 @@ namespace Key_monitoring.Servises
 
         public async Task<Guid> CreateApplication(ApplicationCreateDTO data)
         {
-            var pair = await _dbContext.Schedule.FirstOrDefaultAsync(x => x.Id == data.pairId);
-            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == data.userId);
-            var key = await _dbContext.Keys.FirstOrDefaultAsync(x => x.Id == data.keyId);
-            if(pair == null || user == null || key == null)
+            try
             {
-                throw new ArgumentException("Ahtung! Wrong ID");
-            }
-            var newAppl = new ApplicationModel
-            {
-                Id = Guid.NewGuid(),
-                CreateTime = DateTime.UtcNow,
-                UserId = user.Id,
-                User = user,
-                ScheduleId = pair.Id,
-                Schedule = pair,
-                KeyId = key.Id,
-                Key = key,
-                Repetitive = data.repetitive,
-                Status = ApplicationStatusEnum.UnderConsideration
-            };
-            await _dbContext.Applications.AddAsync(newAppl);
-            await _dbContext.SaveChangesAsync();
-
-            if (user.Role != RoleEnum.Student || user.Role != RoleEnum.NotСonfirmed)
-            {
-                var applList = await _dbContext.Applications.Where(x => x.ScheduleId == newAppl.ScheduleId && x.KeyId == newAppl.KeyId && x.User.Role == RoleEnum.Student).ToListAsync();
-                foreach (var applic in applList)
+                var pair = await _dbContext.Schedule.FirstOrDefaultAsync(x => x.Id == data.pairId);
+                var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == data.userId);
+                var key = await _dbContext.Keys.FirstOrDefaultAsync(x => x.Id == data.keyId);
+                if (pair == null || user == null || key == null)
                 {
-                    applic.Status = ApplicationStatusEnum.Denied;
-                    _dbContext.Applications.Update(applic);
-                    await _dbContext.SaveChangesAsync();
+                    throw new ArgumentException("Ahtung! Wrong ID");
                 }
-            }
+                var newAppl = new ApplicationModel
+                {
+                    Id = Guid.NewGuid(),
+                    CreateTime = DateTime.UtcNow,
+                    UserId = user.Id,
+                    User = user,
+                    ScheduleId = pair.Id,
+                    Schedule = pair,
+                    KeyId = key.Id,
+                    Key = key,
+                    Repetitive = data.repetitive,
+                    Status = ApplicationStatusEnum.UnderConsideration
+                };
+                await _dbContext.Applications.AddAsync(newAppl);
+                await _dbContext.SaveChangesAsync();
 
-            return newAppl.Id;
+                if (user.Role != RoleEnum.Student || user.Role != RoleEnum.NotСonfirmed)
+                {
+                    var applList = await _dbContext.Applications.Where(x => x.ScheduleId == newAppl.ScheduleId && x.KeyId == newAppl.KeyId && x.User.Role == RoleEnum.Student).ToListAsync();
+                    foreach (var applic in applList)
+                    {
+                        applic.Status = ApplicationStatusEnum.Denied;
+                        _dbContext.Applications.Update(applic);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                }
+
+                if (data.repetitive == true)
+                {
+                    var newappList = new List<ApplicationModel>();
+                    for(int i = 0; i < 4; ++i)
+                    {
+                        var nextPair = await _dbContext.Schedule.FirstOrDefaultAsync(x => x.PairStart == pair.PairStart.AddDays(7 * (i + 1)));
+                        if(nextPair != null)
+                        {
+                            newappList.Add(new ApplicationModel
+                            {
+                                Id = Guid.NewGuid(),
+                                CreateTime = newAppl.CreateTime,
+                                UserId = user.Id,
+                                User = user,
+                                ScheduleId = nextPair.Id,
+                                Schedule = nextPair,
+                                KeyId = key.Id,
+                                Key = key,
+                                Repetitive = data.repetitive,
+                                Status = ApplicationStatusEnum.Repetiteve
+                            });
+                        }
+                    }
+                    foreach(var app in newappList)
+                    {
+                        await _dbContext.Applications.AddAsync(newAppl);
+                        await _dbContext.SaveChangesAsync();
+                    }
+
+                    if (user.Role != RoleEnum.Student || user.Role != RoleEnum.NotСonfirmed)
+                    {
+                        foreach(var app in newappList) 
+                        {
+                            var applList = await _dbContext.Applications.Where(x => x.ScheduleId == app.ScheduleId && x.KeyId == app.KeyId && x.User.Role == RoleEnum.Student).ToListAsync();
+                            foreach (var applic in applList)
+                            {
+                                applic.Status = ApplicationStatusEnum.Denied;
+                                _dbContext.Applications.Update(applic);
+                                await _dbContext.SaveChangesAsync();
+                            }
+                        }
+                    }
+                }
+
+                return newAppl.Id;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<Guid> ChangeApplicationStatus(ApplicationStatusDTO data)
         {
-            var appl = await _dbContext.Applications.FirstOrDefaultAsync(x => x.Id == data.id);
-            if (appl == null || appl.UserId != data.userID)
+            try
             {
-                throw new ArgumentException("Ahtung! Wrong ID");
-            }
-            if(data.status == ApplicationStatusEnum.Approved)
-            {
-                var applList = await _dbContext.Applications.Where(x => x.ScheduleId == appl.ScheduleId && x.KeyId == appl.KeyId).ToListAsync();
-                foreach (var applic in applList)
+                var appl = await _dbContext.Applications.FirstOrDefaultAsync(x => x.Id == data.id && x.Status != ApplicationStatusEnum.Repetiteve);
+                if (appl == null || appl.UserId != data.userID)
                 {
-                    applic.Status = ApplicationStatusEnum.Denied;
-                    _dbContext.Applications.Update(applic);
-                    await _dbContext.SaveChangesAsync();
+                    throw new ArgumentException("Ahtung! Wrong ID");
                 }
+
+                if (data.status == ApplicationStatusEnum.Approved)
+                {
+                    var applList = await _dbContext.Applications.Where(x => x.ScheduleId == appl.ScheduleId && x.KeyId == appl.KeyId).ToListAsync();
+                    foreach (var applic in applList)
+                    {
+                        applic.Status = ApplicationStatusEnum.Denied;
+                        _dbContext.Applications.Update(applic);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                }
+                appl.Status = data.status;
+                _dbContext.Applications.Update(appl);
+                await _dbContext.SaveChangesAsync();
+
+                return appl.Id;
             }
-            appl.Status = data.status;
-            _dbContext.Applications.Update(appl);
-            await _dbContext.SaveChangesAsync();
-            return appl.Id;
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<ApplicationsListDto> GetApplicationsList(ApplicationStatusEnum? status, RoleEnum? role, int? cabinetNumber, string? partOfName, PaginationReqDTO pagination)

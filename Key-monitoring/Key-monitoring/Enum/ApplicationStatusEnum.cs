@@ -5,7 +5,10 @@ namespace Key_monitoring.Enum
     {
         UnderConsideration,
         Approved,
-        Denied
+        Denied,
+        Repetiteve,
+        KeyGive,
+        KeyTake
     }
 }
 

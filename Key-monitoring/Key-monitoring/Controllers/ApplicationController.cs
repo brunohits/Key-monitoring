@@ -25,7 +25,7 @@ namespace Key_monitoring.Controllers
         }
 
         [HttpPost]
-        [Route("application")]
+        [Route("CreateApplication")]
         public async Task<IActionResult> ApplicationCreate([FromBody] ApplicationCreateDTO data)
         {
             try
@@ -40,7 +40,7 @@ namespace Key_monitoring.Controllers
         }
 
         [HttpPost]
-        [Route("application/status")]
+        [Route("ChangeApplicationStatus")]
         public async Task<IActionResult> ApplicationChangeStatus([FromBody] ApplicationStatusDTO data)
         {
             try
