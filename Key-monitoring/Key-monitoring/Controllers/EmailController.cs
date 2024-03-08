@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Key_monitoring.Controllers;
+
 [ApiController]
 [Route("api/account")]
-public class EmailController : ControllerBase 
+public class EmailController : ControllerBase
 {
     private readonly IEmail _email;
 
@@ -15,33 +16,19 @@ public class EmailController : ControllerBase
     {
         _email = email;
     }
+
     [Authorize]
     [HttpPost("send/email")]
-
-    public async Task<IActionResult> SpecialityGet([FromQuery]Guid? id, [FromQuery]int? numberRoom)
+    public async Task<IActionResult> SpecialityGet([FromQuery] Guid? id, [FromQuery] int? numberRoom)
     {
         try
-        {  
-            if (id.HasValue && numberRoom.HasValue)
-            {
-                bool isEmailSent = await _email.SendEmail(id.Value, Guid.Parse(User.Identity.Name), numberRoom.Value);
-                if (isEmailSent)
-                    return Ok();
-                else
-                    return BadRequest();
-            }
-            else
-            {
-                return BadRequest("Both id and numberRoom are required."); 
-            }
+        {
+            await _email.SendEmail(id.Value, Guid.Parse(User.Identity.Name), numberRoom.Value);
+            return Ok();
         }
         catch (BadHttpRequestException ex)
         {
             return BadRequest(ex.Message);
-        }
-        catch (HttpRequestException ex)
-        {
-            return NotFound("404 Error: Resource not found");
         }
         catch (KeyNotFoundException ex)
         {
@@ -53,6 +40,7 @@ public class EmailController : ControllerBase
             return BadRequest("An error occurred while processing your request.");
         }
     }
+
     [Authorize]
     [HttpPost("send/code")]
     public async Task<IActionResult> CheckCode(int number)
@@ -75,5 +63,4 @@ public class EmailController : ControllerBase
             return BadRequest("An error occurred while processing your request.");
         }
     }
-
 }

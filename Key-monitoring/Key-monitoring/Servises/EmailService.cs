@@ -19,23 +19,30 @@ public class EmailService : IEmail
         _dbContext = dbContext;
     }
 
-  public async Task<bool> SendEmail(Guid idWhere, Guid idSomeone, int numberRoom)
-{
-    try
+    public async Task SendEmail(Guid idWhere, Guid idSomeone, int numberRoom)
     {
         var userEmailWhere = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == idWhere);
         var userEmailSomeone = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == idSomeone);
         var checkNumberRoom = await _dbContext.KeyModels.FirstOrDefaultAsync(x => x.CabinetNumber == numberRoom);
+        if (checkNumberRoom.OwnerId != idSomeone)
+        {
+            throw new BadHttpRequestException("Вы не владеете данным ключом");
+        }
+
+        if (idWhere == idSomeone)
+        {
+            throw new BadHttpRequestException("Ключ нельзя передать самому себе");   
+        }
         if (userEmailWhere == null)
         {
             throw new KeyNotFoundException("Данный пользователь не найден");
         }
-        
+
         if (checkNumberRoom == null)
         {
             throw new KeyNotFoundException("Данный кабинет не найден");
         }
-   
+
         int _min = 1000;
         int _max = 9999;
         Random _rdm = new Random();
@@ -56,49 +63,41 @@ public class EmailService : IEmail
         smtpClient.UseDefaultCredentials = false;
         smtpClient.Credentials = new NetworkCredential(from.Address, "gawz ykxd xgqz syzs");
         await smtpClient.SendMailAsync(mailMessage);
-        
+
         var addDbNumbre = new CodeForEmailModel()
         {
             Id = Guid.NewGuid(),
             IdToAdress = userEmailSomeone.Id,
             IdFromAdress = userEmailWhere.Id,
-            LifeOfCode = DateTime.Now,
-            Code = number, 
+            LifeOfCode = DateTime.UtcNow,
+            Code = number,
             NumberRoom = numberRoom
         };
         _dbContext.Add(addDbNumbre);
-        await _dbContext.SaveChangesAsync();
+       await _dbContext.SaveChangesAsync();
+    }
 
-        return true;
-    }
-    catch (KeyNotFoundException ex)
-    {
-        throw new KeyNotFoundException("User or key not exists");
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error sending email: {ex.Message}");
-        return false;
-    }
-}
-
-    public async Task  SendCode(int number, Guid id)
+    public async Task SendCode(int number, Guid id)
     {
         int _min = 1000;
         int _max = 9999;
         if (_min > number || _max < number)
         {
-            throw new ArgumentException($"{number} - должен быть меньше 9999 и больше 1000");   
+            throw new ArgumentException($"{number} - должен быть меньше 9999 и больше 1000");
         }
+
         var checkCode = await _dbContext.CodeForEmails.FirstOrDefaultAsync(x => x.Code == number && x.IdToAdress == id);
         if (checkCode == null)
         {
             throw new KeyNotFoundException("Данный код не найден");
         }
-        if (checkCode.LifeOfCode < DateTime.Now.AddMinutes(5))
+
+        DateTime time = DateTime.UtcNow.AddMinutes(5);
+        if (checkCode.LifeOfCode > DateTime.UtcNow.AddMinutes(5))
         {
             throw new ArgumentException("Данный код устарел");
         }
+
         var searchRoom = await _dbContext.KeyModels.FirstOrDefaultAsync(x => x.CabinetNumber == checkCode.NumberRoom);
 
         if (searchRoom == null)
@@ -108,7 +107,9 @@ public class EmailService : IEmail
         else
         {
             searchRoom.OwnerId = checkCode.IdFromAdress;
-           await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
+            _dbContext.CodeForEmails.Remove(checkCode);
+            _dbContext.SaveChanges();
         }
     }
 }
