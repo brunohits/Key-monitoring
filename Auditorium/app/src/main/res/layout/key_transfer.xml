@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/inter_bold"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:layout_marginTop="35dp"
+        android:text="Выберите пользователя "
+        android:textColor="#000"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="49dp"
+        tools:layout_editor_absoluteY="30dp" />
+
+
+    <EditText
+        android:id="@+id/user_login_auth"
+        android:layout_width="220dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:inputType="text"
+        android:textColorHint="#6a6a6a"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:textColor="#000000"
+        android:hint="Введите логин" />
+
+
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/inter_bold"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:layout_marginTop="35dp"
+        android:text="Выберте имеющийся ключ"
+        android:textColor="#000"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="47dp"
+        tools:layout_editor_absoluteY="173dp" />
+
+    <EditText
+        android:id="@+id/search_human"
+        android:layout_width="220dp"
+        android:layout_height="50dp"
+        android:ems="10"
+        android:inputType="text"
+        android:textColorHint="#6a6a6a"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:textColor="#000000"
+        android:hint="Введите логин" />
+
+
+    <Button
+        android:id="@+id/transfer_button2"
+        android:layout_width="212dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="#1E90FF"
+        android:paddingHorizontal="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Отправить запрос"
+        tools:layout_editor_absoluteX="99dp"
+        tools:layout_editor_absoluteY="341dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:fontFamily="@font/inter_bold"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
+        android:text="Введите код подтверждения"
+        android:textColor="#000"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="36dp"
+        tools:layout_editor_absoluteY="454dp" />
+
+
+    <EditText
+        android:id="@+id/search_key"
+        android:layout_width="220dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:ems="10"
+        android:inputType="numberPassword"
+        tools:layout_editor_absoluteX="92dp"
+        tools:layout_editor_absoluteY="528dp"
+        android:hint="Введите код"/>
+
+    <Button
+        android:id="@+id/transfer_button"
+        android:layout_width="212dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="#1E90FF"
+        android:paddingHorizontal="20dp"
+        android:layout_marginTop="30dp"
+        android:text="Подтвердить передачу"
+        tools:layout_editor_absoluteX="82dp"
+        tools:layout_editor_absoluteY="618dp" />
+
+</LinearLayout>
