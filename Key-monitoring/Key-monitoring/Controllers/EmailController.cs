@@ -1,6 +1,8 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Key_monitoring.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Key_monitoring.Controllers;
 [ApiController]
@@ -16,19 +18,34 @@ public class EmailController : ControllerBase
     [Authorize]
     [HttpPost("send/email")]
 
-    public async Task<IActionResult> SpecialityGet(Guid id, int numberRoom)
+    public async Task<IActionResult> SpecialityGet([FromQuery]Guid? id, [FromQuery]int? numberRoom)
     {
         try
-        {
-            bool isEmailSent = await _email.SendEmail(id, Guid.Parse(User.Identity.Name), numberRoom);
-            if (isEmailSent)
-                return Ok();
+        {  
+            if (id.HasValue && numberRoom.HasValue)
+            {
+                bool isEmailSent = await _email.SendEmail(id.Value, Guid.Parse(User.Identity.Name), numberRoom.Value);
+                if (isEmailSent)
+                    return Ok();
+                else
+                    return BadRequest();
+            }
             else
-                return BadRequest("Failed to send email.");
+            {
+                return BadRequest("Both id and numberRoom are required."); 
+            }
         }
         catch (BadHttpRequestException ex)
         {
             return BadRequest(ex.Message);
+        }
+        catch (HttpRequestException ex)
+        {
+            return NotFound("404 Error: Resource not found");
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
         }
         catch (Exception ex)
         {
@@ -45,10 +62,17 @@ public class EmailController : ControllerBase
             await _email.SendCode(number, Guid.Parse(User.Identity.Name));
             return Ok();
         }
-        catch (Exception e)
+        catch (ArgumentException ex)
         {
-            Console.WriteLine(e);
-            throw;
+            return BadRequest(ex.Message);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest("An error occurred while processing your request.");
         }
     }
 
