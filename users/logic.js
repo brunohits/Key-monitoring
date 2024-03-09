@@ -1,6 +1,7 @@
-var token1 = localStorage.getItem('token');
-var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYmNhMDliZmItMzE3Mi00OTEzLThmYTctMDA4ZDZjMjdlYmM5IiwibmJmIjoxNzA5ODg4MzYxLCJleHAiOjE3MDk4OTE5NjEsImlzcyI6IktleS1Nb25pdG9yaW5nIiwiYXVkIjoiU3R1ZGVudEFuZFRlYWNoZXIifQ.4ecDlgRJWNklkG6mSHlkkcrtg0IANr_VQN4xlEFqvvE"
+var token = localStorage.getItem('token');
 console.log(token)
+
+getOfficeName('https://localhost:7266/api/account/profile', token);
 
 async function get(url) {
   return fetch(url, {
@@ -240,9 +241,30 @@ async function put(id, role, token) {
       const errorMessage = document.getElementById('errorMessage');
       errorMessage.textContent = '';
       console.log(result);
+      window.location.reload(true);
     })
     .catch(error => {
       console.error('Ошибка', error);
-      //window.location.reload(true);
+      window.location.reload(true);
     });
+}
+
+
+
+//--------------------------------------------------------
+async function getOfficeName(url, token) {
+  return fetch(url, {
+      method: 'GET',
+      headers: new Headers({
+          "Authorization": `Bearer ${token}`
+      }),
+  })
+      .then(response => response.json())
+      .then(async data => {
+          console.log(data);
+          document.getElementById('user').textContent = data.fullName;
+      })
+      .catch(error => {
+          console.error('Ошибка', error);
+      });
 }
