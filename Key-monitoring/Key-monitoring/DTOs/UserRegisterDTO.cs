@@ -20,5 +20,5 @@ public class UserRegisterDTO
     [Phone]
     public string? PhoneNumber { get; set; }
     public Guid FacultyId { get; set; }
-    public RoleEnum Role { get; set; }
+   // public RoleEnum Role { get; set; }
 }

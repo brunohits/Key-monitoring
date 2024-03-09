@@ -10,9 +10,9 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 // Add services to the container.
 //sadsadas
@@ -24,6 +24,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDeanOffice, DeansOffice>();
 builder.Services.AddScoped<IUser, UserService>();
+builder.Services.AddScoped<IEmail, EmailService>();
 builder.Services.AddScoped<IKeyService, KeyService>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IScheduleService, ScheduleService>();
@@ -69,7 +70,6 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
 var mapperConfig = new MapperConfiguration(mc => { mc.AddProfile(new Mapping()); });
 var mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
@@ -81,6 +81,25 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var dbContext = services.GetRequiredService<ApplicationDbContext>();
+        dbContext.Database.Migrate();
+        if (!dbContext.Database.GetPendingMigrations().Any())
+        {
+            dbContext.Database.EnsureCreated(); 
+            Console.WriteLine("Automatically applied migration.");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error occurred while migrating: {ex.Message}");
+    }
 }
 
 app.UseHttpsRedirection();

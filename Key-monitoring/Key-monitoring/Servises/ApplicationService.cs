@@ -39,7 +39,7 @@ namespace Key_monitoring.Servises
             {
                 var pair = await _dbContext.Schedule.FirstOrDefaultAsync(x => x.Id == data.pairId);
                 var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == data.userId);
-                var key = await _dbContext.Keys.FirstOrDefaultAsync(x => x.Id == data.keyId);
+                var key = await _dbContext.KeyModels.FirstOrDefaultAsync(x => x.Id == data.keyId);
                 if (pair == null || user == null || key == null)
                 {
                     var exception = new Exception();
@@ -259,7 +259,7 @@ namespace Key_monitoring.Servises
                         throw exception;
                     }
 
-                    var usu = await _dbContext.Keys.FirstOrDefaultAsync(x => x.Id == app.KeyId);
+                    var usu = await _dbContext.KeyModels.FirstOrDefaultAsync(x => x.Id == app.KeyId);
                     if (usu == null)
                     {
                         var exception = new Exception();
@@ -334,7 +334,7 @@ namespace Key_monitoring.Servises
                         throw exception;
                     }
 
-                    var usu = await _dbContext.Keys.FirstOrDefaultAsync(x => x.Id == app.KeyId);
+                    var usu = await _dbContext.KeyModels.FirstOrDefaultAsync(x => x.Id == app.KeyId);
                     if (usu == null)
                     {
                         var exception = new Exception();

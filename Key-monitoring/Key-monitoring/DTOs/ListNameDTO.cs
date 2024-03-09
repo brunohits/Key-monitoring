@@ -1,3 +1,5 @@
+using Key_monitoring.Enum;
+
 namespace Key_monitoring.DTOs;
 
     public class NameAndPaginGetDTO
@@ -16,7 +18,12 @@ namespace Key_monitoring.DTOs;
 
     public class UserNameDTO
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public RoleEnum Role { get; set; }
+        public DateTime CreateDate { get; set; }
     }
 
     public class FullResponseDTO

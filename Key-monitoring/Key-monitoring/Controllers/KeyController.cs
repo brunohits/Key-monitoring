@@ -16,7 +16,6 @@ namespace Key_monitoring.Controllers
     [Route("api/key")]
     public class KeyController : ControllerBase
     {
-        //создать интерфейс
         private readonly IKeyService _keyService;
 
         public KeyController(IKeyService keyService)

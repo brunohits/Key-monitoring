@@ -22,42 +22,30 @@ namespace Keymonitoring.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Key_monitoring.Models.ApplicationModel", b =>
+            modelBuilder.Entity("Key_monitoring.Models.CodeForEmailModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("Clone")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("KeyId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("Repetitive")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid>("ScheduleId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Status")
+                    b.Property<int>("Code")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("IdFromAdress")
                         .HasColumnType("uuid");
+
+                    b.Property<Guid>("IdToAdress")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("LifeOfCode")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("NumberRoom")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("KeyId");
-
-                    b.HasIndex("ScheduleId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Applications");
+                    b.ToTable("CodeForEmails");
                 });
 
             modelBuilder.Entity("Key_monitoring.Models.FacultyModel", b =>
@@ -94,28 +82,11 @@ namespace Keymonitoring.Migrations
                     b.Property<Guid?>("OwnerId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Keys");
-                });
-
-            modelBuilder.Entity("Key_monitoring.Models.ScheduleModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("PairStart")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Schedule");
+                    b.ToTable("KeyModels");
                 });
 
             modelBuilder.Entity("Key_monitoring.Models.TokenModel", b =>
@@ -182,33 +153,6 @@ namespace Keymonitoring.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Key_monitoring.Models.ApplicationModel", b =>
-                {
-                    b.HasOne("Key_monitoring.Models.KeyModel", "Key")
-                        .WithMany()
-                        .HasForeignKey("KeyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Key_monitoring.Models.ScheduleModel", "Schedule")
-                        .WithMany()
-                        .HasForeignKey("ScheduleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Key_monitoring.Models.UserModel", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Key");
-
-                    b.Navigation("Schedule");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Key_monitoring.Models.KeyModel", b =>

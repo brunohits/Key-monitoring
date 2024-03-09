@@ -34,7 +34,7 @@ namespace Key_monitoring.Servises
             try
             {
                 var newId = Guid.NewGuid();
-                await _dbContext.Keys.AddAsync(new KeyModel
+                await _dbContext.KeyModels.AddAsync(new KeyModel
                 {
                     Id = newId,
                     CreateTime = DateTime.UtcNow,
@@ -58,7 +58,7 @@ namespace Key_monitoring.Servises
         {
             try
             {
-                var allKeys = await _dbContext.Keys.ToListAsync();
+                var allKeys = await _dbContext.KeyModels.ToListAsync();
 
                 var KeyList = new KeyListDTO();
                 KeyList.List = new List<KeyListElementDTO>();
@@ -192,7 +192,7 @@ namespace Key_monitoring.Servises
                     throw exception;
                 }
 
-                var key = await _dbContext.Keys.FirstOrDefaultAsync(x => x.Id == keyId);
+                var key = await _dbContext.KeyModels.FirstOrDefaultAsync(x => x.Id == keyId);
                 if (key == null)
                 {
                     var exception = new Exception();
@@ -204,7 +204,7 @@ namespace Key_monitoring.Servises
                     key.Status = KeyStatusEnum.Available;
                     key.OwnerId = id;
                     key.Owner = searchUser;
-                    _dbContext.Keys.Update(key);
+                    _dbContext.KeyModels.Update(key);
                     await _dbContext.SaveChangesAsync();
                     return KeyStatusEnum.Available;
                 }
@@ -220,7 +220,7 @@ namespace Key_monitoring.Servises
                     key.Status = KeyStatusEnum.OnHands;
                     key.OwnerId = user.Id;
                     key.Owner = user;
-                    _dbContext.Keys.Update(key);
+                    _dbContext.KeyModels.Update(key);
                     await _dbContext.SaveChangesAsync();
                     return KeyStatusEnum.OnHands;
                 }

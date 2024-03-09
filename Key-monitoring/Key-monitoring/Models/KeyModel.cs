@@ -1,4 +1,4 @@
-﻿using Key_monitoring.Enum;
+using Key_monitoring.Enum;
 using System.ComponentModel.DataAnnotations;
 
 namespace Key_monitoring.Models;

@@ -8,8 +8,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<UserModel> Users { get; set; }
     public DbSet<TokenModel> Tokens { get; set; }
     public DbSet<FacultyModel> Faculties { get; set; }
-    public DbSet<KeyModel> Keys { get; set; }
-    public DbSet<ScheduleModel> Schedule {  get; set; }
+    public DbSet<CodeForEmailModel> CodeForEmails { get; set; }
+    public DbSet<KeyModel> KeyModels { get; set; }
+    public DbSet<ScheduleModel> Schedule { get; set; }
     public DbSet<ApplicationModel> Applications { get; set; }
 
 
