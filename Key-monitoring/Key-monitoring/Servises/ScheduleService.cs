@@ -40,38 +40,41 @@ namespace Key_monitoring.Servises
                         throw new ArgumentException("Wrong week data");
                     }
                 }
+
+                var modifiedStart = new DateTime(start.Year, start.Month, start.Day, 0, 0, 0);
+
                 var newPairsList = new List<ScheduleModel>();
                 for(int i = 0;i < 6; ++i) 
                 {
                     newPairsList.Add(new ScheduleModel
                     {
                         Id = Guid.NewGuid(),
-                        PairStart = start.AddDays(i).AddHours(8).AddMinutes(45)
+                        PairStart = modifiedStart.AddDays(i).AddHours(8).AddMinutes(45)
                     });
                     newPairsList.Add(new ScheduleModel
                     {
                         Id = Guid.NewGuid(),
-                        PairStart = start.AddDays(i).AddHours(10).AddMinutes(35)
+                        PairStart = modifiedStart.AddDays(i).AddHours(10).AddMinutes(35)
                     });
                     newPairsList.Add(new ScheduleModel
                     {
                         Id = Guid.NewGuid(),
-                        PairStart = start.AddDays(i).AddHours(12).AddMinutes(25)
+                        PairStart = modifiedStart.AddDays(i).AddHours(12).AddMinutes(25)
                     });
                     newPairsList.Add(new ScheduleModel
                     {
                         Id = Guid.NewGuid(),
-                        PairStart = start.AddDays(i).AddHours(14).AddMinutes(45)
+                        PairStart = modifiedStart.AddDays(i).AddHours(14).AddMinutes(45)
                     });
                     newPairsList.Add(new ScheduleModel
                     {
                         Id = Guid.NewGuid(),
-                        PairStart = start.AddDays(i).AddHours(16).AddMinutes(35)
+                        PairStart = modifiedStart.AddDays(i).AddHours(16).AddMinutes(35)
                     });
                     newPairsList.Add(new ScheduleModel
                     {
                         Id = Guid.NewGuid(),
-                        PairStart = start.AddDays(i).AddHours(18).AddMinutes(25)
+                        PairStart = modifiedStart.AddDays(i).AddHours(18).AddMinutes(25)
                     });
                 }
                 foreach (var pair in newPairsList)

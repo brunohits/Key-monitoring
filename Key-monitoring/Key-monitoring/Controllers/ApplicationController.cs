@@ -57,19 +57,11 @@ namespace Key_monitoring.Controllers
 
         [HttpGet]
         [Route("applicationsList")]
-        public async Task<IActionResult> ApplicationsList([FromHeader] ApplicationStatusEnum? status, [FromHeader] RoleEnum? role, [FromHeader] int? cabinetNumber, [FromHeader] string? partOfName, [FromHeader] PaginationReqDTO pagination)
+        public async Task<IActionResult> ApplicationsList([FromHeader] ApplicationStatusEnum? status, [FromHeader] RoleEnum? role, [FromHeader] int? cabinetNumber, [FromHeader] string? partOfName, [FromHeader] int page, [FromHeader] int size)
         {
             try
             {
-                var result = await _applicationService.GetApplicationsList(status, role, cabinetNumber, partOfName, pagination);
-                if (result != null)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest(result);
-                }
+                return Ok(await _applicationService.GetApplicationsList(status, role, cabinetNumber, partOfName, page, size));
             }
             catch (Exception ex)
             {
@@ -80,19 +72,11 @@ namespace Key_monitoring.Controllers
 
         [HttpGet]
         [Route("applicationsList/User")]
-        public async Task<IActionResult> ApplicationsListUser([FromBody] ApplicationsListUserDTO data)
+        public async Task<IActionResult> ApplicationsListUser([FromHeader] Guid userId, [FromHeader] ApplicationStatusEnum? status)
         {
             try
             {
-                var result = await _applicationService.GetApplicationsListUser(data);
-                if (result != null)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest(result);
-                }
+                return Ok(await _applicationService.GetApplicationsListUser(userId, status));
             }
             catch (Exception ex)
             {
@@ -107,15 +91,7 @@ namespace Key_monitoring.Controllers
         {
             try
             {
-                var result = await _applicationService.ApplicationDelete(data);
-                if (result != null)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest(result);
-                }
+                return Ok(await _applicationService.ApplicationDelete(data));
             }
             catch (Exception ex)
             {

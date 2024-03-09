@@ -9,7 +9,7 @@ public interface IApplicationService
 {
     Task<Guid> ChangeApplicationStatus(ApplicationStatusDTO data);
     Task<Guid> CreateApplication(ApplicationCreateDTO data);
-    Task<ApplicationsListDto> GetApplicationsList(ApplicationStatusEnum? status, RoleEnum? role, int? cabinetNumber, string? partOfName, PaginationReqDTO pagination);
-    Task<ApplicationListForUserDTO> GetApplicationsListUser(ApplicationsListUserDTO data);
+    Task<ApplicationsListDto> GetApplicationsList(ApplicationStatusEnum? status, RoleEnum? role, int? cabinetNumber, string? partOfName, int page, int size);
+    Task<ApplicationListForUserDTO> GetApplicationsListUser(Guid userId, ApplicationStatusEnum? status);
     Task<bool> ApplicationDelete(ApplicationDeleteDTO data);
 }

@@ -7,6 +7,4 @@ namespace Key_monitoring.DTOs;
 public class ApplicationDeleteDTO
 {
     public Guid applicationId { get; set; }
-
-    public Guid userId { get; set; }
 }
