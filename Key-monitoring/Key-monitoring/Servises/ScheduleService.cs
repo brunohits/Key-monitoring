@@ -96,7 +96,7 @@ namespace Key_monitoring.Servises
         {
             try
             {
-                var pairs = await _dbContext.Schedule.Where(x => x.PairStart <=  start).Take(36).ToListAsync();
+                var pairs = await _dbContext.Schedule.Where(x => x.PairStart >=  start).Take(36).ToListAsync();
                 if (pairs.Count == 0 || pairs == null || pairs.Count < 36)
                 {
                     throw new ArgumentException("Wrong week data");

@@ -40,11 +40,11 @@ namespace Key_monitoring.Controllers
 
         [HttpGet]
         [Route("GetWeek")]
-        public async Task<IActionResult> GetWeek([FromBody] GetWeekDTO start)
+        public async Task<IActionResult> GetWeek([FromHeader] DateTime start)
         {
             try
             {
-                return Ok(await _scheduleService.GetWeek(start.WeekStart));
+                return Ok(await _scheduleService.GetWeek(start));
             }
             catch (Exception ex)
             {
