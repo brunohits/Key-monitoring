@@ -24,5 +24,7 @@ public class ApplicationModel
 
     public required bool Repetitive { get; set; }
 
+    public required bool Clone {  get; set; }
+
     public required ApplicationStatusEnum Status { get; set; }
 }

@@ -34,7 +34,7 @@ namespace Key_monitoring.Servises
             {
                 for(int i = 0; i < 6; ++i)
                 {
-                    var par = await _dbContext.Schedule.FirstOrDefaultAsync(x => x.PairStart.ToShortDateString() == start.AddDays(i).ToShortDateString());
+                    var par = await _dbContext.Schedule.FirstOrDefaultAsync(x => x.PairStart.Date == start.AddDays(i).Date);
                     if(par != null)
                     {
                         throw new ArgumentException("Wrong week data");

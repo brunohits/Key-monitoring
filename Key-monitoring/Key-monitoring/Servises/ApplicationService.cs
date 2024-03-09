@@ -55,6 +55,7 @@ namespace Key_monitoring.Servises
                     KeyId = key.Id,
                     Key = key,
                     Repetitive = data.repetitive,
+                    Clone = false,
                     Status = ApplicationStatusEnum.UnderConsideration
                 };
                 await _dbContext.Applications.AddAsync(newAppl);
@@ -90,13 +91,14 @@ namespace Key_monitoring.Servises
                                 KeyId = key.Id,
                                 Key = key,
                                 Repetitive = data.repetitive,
-                                Status = ApplicationStatusEnum.Repetiteve
+                                Clone = true,
+                                Status = ApplicationStatusEnum.UnderConsideration
                             });
                         }
                     }
                     foreach(var app in newappList)
                     {
-                        await _dbContext.Applications.AddAsync(newAppl);
+                        await _dbContext.Applications.AddAsync(app);
                         await _dbContext.SaveChangesAsync();
                     }
 
@@ -127,8 +129,8 @@ namespace Key_monitoring.Servises
         {
             try
             {
-                var appl = await _dbContext.Applications.FirstOrDefaultAsync(x => x.Id == data.id && x.Status != ApplicationStatusEnum.Repetiteve);
-                if (appl == null || appl.UserId != data.userID)
+                var appl = await _dbContext.Applications.FirstOrDefaultAsync(x => x.Id == data.id);
+                if (appl == null)
                 {
                     throw new ArgumentException("Ahtung! Wrong ID");
                 }
@@ -141,11 +143,32 @@ namespace Key_monitoring.Servises
                         applic.Status = ApplicationStatusEnum.Denied;
                         _dbContext.Applications.Update(applic);
                         await _dbContext.SaveChangesAsync();
+                        if(applic.Repetitive == true && applic.Clone == false)
+                        {
+                            var cloneList = await _dbContext.Applications.Where(x => x.CreateTime == applic.CreateTime && x.User == applic.User && x.Key == applic.Key && x.Schedule == applic.Schedule && x.Clone == true).ToListAsync();
+                            foreach (var ap in cloneList)
+                            {
+                                ap.Status = ApplicationStatusEnum.Denied;
+                                _dbContext.Applications.Update(ap);
+                                await _dbContext.SaveChangesAsync();
+                            }
+                        }
                     }
                 }
                 appl.Status = data.status;
                 _dbContext.Applications.Update(appl);
                 await _dbContext.SaveChangesAsync();
+
+                if (appl.Repetitive == true && appl.Clone == false)
+                {
+                    var cloneApplList = await _dbContext.Applications.Where(x => x.CreateTime == appl.CreateTime && x.User == appl.User && x.Key == appl.Key && x.Schedule == appl.Schedule && x.Clone == true).ToListAsync();
+                    foreach (var applic in cloneApplList)
+                    {
+                        applic.Status = data.status;
+                        _dbContext.Applications.Update(applic);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                }
 
                 return appl.Id;
             }

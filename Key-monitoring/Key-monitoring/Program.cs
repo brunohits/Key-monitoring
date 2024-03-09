@@ -24,6 +24,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDeanOffice, DeansOffice>();
 builder.Services.AddScoped<IUser, UserService>();
 builder.Services.AddScoped<IKeyService, KeyService>();
+builder.Services.AddScoped<IApplicationService, ApplicationService>();
+builder.Services.AddScoped<IScheduleService, ScheduleService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

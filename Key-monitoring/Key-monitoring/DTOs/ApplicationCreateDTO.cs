@@ -6,9 +6,13 @@ namespace Key_monitoring.DTOs;
 
 public class ApplicationCreateDTO
 {
-    public Guid pairId { get; set; }
-    public Guid userId { get; set; }
-    public Guid keyId { get; set; }
-    public bool repetitive { get; set; }
+    [Required(ErrorMessage = "The pairId field is required.")]
+    public required Guid pairId { get; set; }
+    [Required(ErrorMessage = "The userId field is required.")]
+    public required Guid userId { get; set; }
+    [Required(ErrorMessage = "The keyId field is required.")]
+    public required Guid keyId { get; set; }
+    [Required(ErrorMessage = "The repetitive field is required.")]
+    public required bool repetitive { get; set; }
 
 }
