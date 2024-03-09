@@ -137,7 +137,7 @@ namespace Key_monitoring.Servises
 
                 if (data.status == ApplicationStatusEnum.Approved)
                 {
-                    var applList = await _dbContext.Applications.Where(x => x.ScheduleId == appl.ScheduleId && x.KeyId == appl.KeyId).ToListAsync();
+                    var applList = await _dbContext.Applications.Where(x => x.ScheduleId == appl.ScheduleId && x.KeyId == appl.KeyId && x.Id != appl.Id).ToListAsync();
                     foreach (var applic in applList)
                     {
                         applic.Status = ApplicationStatusEnum.Denied;
@@ -145,7 +145,7 @@ namespace Key_monitoring.Servises
                         await _dbContext.SaveChangesAsync();
                         if(applic.Repetitive == true && applic.Clone == false)
                         {
-                            var cloneList = await _dbContext.Applications.Where(x => x.CreateTime == applic.CreateTime && x.User == applic.User && x.Key == applic.Key && x.Schedule == applic.Schedule && x.Clone == true).ToListAsync();
+                            var cloneList = await _dbContext.Applications.Where(x => x.CreateTime == applic.CreateTime && x.UserId == applic.UserId && x.KeyId == applic.KeyId && x.Clone == true).ToListAsync();
                             foreach (var ap in cloneList)
                             {
                                 ap.Status = ApplicationStatusEnum.Denied;
@@ -161,7 +161,7 @@ namespace Key_monitoring.Servises
 
                 if (appl.Repetitive == true && appl.Clone == false)
                 {
-                    var cloneApplList = await _dbContext.Applications.Where(x => x.CreateTime == appl.CreateTime && x.User == appl.User && x.Key == appl.Key && x.Schedule == appl.Schedule && x.Clone == true).ToListAsync();
+                    var cloneApplList = await _dbContext.Applications.Where(x => x.CreateTime == appl.CreateTime && x.UserId == appl.UserId && x.KeyId == appl.KeyId && x.Clone == true).ToListAsync();
                     foreach (var applic in cloneApplList)
                     {
                         applic.Status = data.status;

@@ -61,6 +61,7 @@ namespace Key_monitoring.Servises
                 var allKeys = await _dbContext.Keys.ToListAsync();
 
                 var KeyList = new KeyListDTO();
+                KeyList.List = new List<KeyListElementDTO>();
                 foreach (var key in allKeys)
                 {
                     Guid? ownID;
@@ -68,9 +69,18 @@ namespace Key_monitoring.Servises
                     RoleEnum? ownRole;
                     if (key.Status == KeyStatusEnum.OnHands)
                     {
-                        ownID = key.Owner.Id;
-                        ownName = key.Owner.FullName;
-                        ownRole = key.Owner.Role;
+                        var own = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == key.OwnerId);
+
+                        if (own == null)
+                        {
+                            var exception = new Exception();
+                            exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Человек был не найден");
+                            throw exception;
+                        }
+
+                        ownID = key.OwnerId;
+                        ownName = own.FullName;
+                        ownRole = own.Role;
                     }
                     else
                     {
@@ -78,7 +88,7 @@ namespace Key_monitoring.Servises
                         ownName = null;
                         ownRole = null;
                     }
-                    KeyList.List.Add(new KeyListElementDTO
+                    var newKeyEl = new KeyListElementDTO
                     {
                         Id = key.Id,
                         CabinetNumber = key.CabinetNumber,
@@ -86,7 +96,8 @@ namespace Key_monitoring.Servises
                         OwnerId = ownID,
                         OwnerName = ownName,
                         OwnerRole = ownRole
-                    });
+                    };
+                    KeyList.List.Add(newKeyEl);
                 }
 
                 return KeyList;
@@ -116,10 +127,18 @@ namespace Key_monitoring.Servises
                 }
                 else
                 {
+                    var us = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == reserv.UserId);
+                    if (us == null)
+                    {
+                        var exception = new Exception();
+                        exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Человек был не найден");
+                        throw exception;
+                    }
+
                     keyData.status = KeyStatusEnum.Booked;
                     keyData.userId = reserv.UserId;
-                    keyData.userName = reserv.User.FullName;
-                    keyData.role = reserv.User.Role.ToString();
+                    keyData.userName = us.FullName;
+                    keyData.role = us.Role.ToString();
                 }
                 day.Add(keyData);
             }
@@ -180,6 +199,7 @@ namespace Key_monitoring.Servises
                 }
                 if (userId == null)
                 {
+                    key.Status = KeyStatusEnum.Available;
                     key.OwnerId = id;
                     key.Owner = searchUser;
                     _dbContext.Keys.Update(key);
@@ -195,6 +215,7 @@ namespace Key_monitoring.Servises
                         exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Человек был не найден");
                         throw exception;
                     }
+                    key.Status = KeyStatusEnum.OnHands;
                     key.OwnerId = user.Id;
                     key.Owner = user;
                     _dbContext.Keys.Update(key);
@@ -208,11 +229,11 @@ namespace Key_monitoring.Servises
             }
         }
 
-        public async Task<KeyDayInfoDTO> GetKeyDayInfo(GetKeyDayInfoDTO data)
+        public async Task<KeyDayInfoDTO> GetKeyDayInfo(Guid KeyId, DateTime day)
         {
             try
             {
-                var pairs = await _dbContext.Schedule.Where(x => x.PairStart.ToLongDateString() == data.day.ToLongDateString()).Take(6).ToListAsync();
+                var pairs = await _dbContext.Schedule.Where(x => x.PairStart.Date == day.Date).ToListAsync();
                 if (pairs == null || pairs.Count != 6)
                 {
                     throw new ArgumentException("Ahtung! Wrong date");
@@ -221,7 +242,7 @@ namespace Key_monitoring.Servises
 
                 foreach (var pair in pairs)
                 {
-                    var keyInfo = await _dbContext.Applications.FirstOrDefaultAsync(x => x.Schedule.PairStart == pair.PairStart && x.Status == ApplicationStatusEnum.Approved);
+                    var keyInfo = await _dbContext.Applications.FirstOrDefaultAsync(x => x.Schedule.PairStart == pair.PairStart && x.KeyId == KeyId && x.Status == ApplicationStatusEnum.Approved);
                     if (keyInfo == null)
                     {
                         statusList.Add(KeyStatusEnum.Available);

@@ -56,11 +56,11 @@ namespace Key_monitoring.Controllers
 
         [HttpGet]
         [Route("GetKeyInfoOnWeek")]
-        public async Task<IActionResult> KeyInfo([FromBody] GetKeyInfoDTO infoData)
+        public async Task<IActionResult> KeyInfo([FromHeader] Guid id, [FromHeader] DateTime Start)
         {
             try
             {
-                return Ok(await _keyService.GetKeyInfo(infoData.id, infoData.Start));
+                return Ok(await _keyService.GetKeyInfo(id, Start));
             }
             catch (Exception ex)
             {
@@ -91,11 +91,11 @@ namespace Key_monitoring.Controllers
 
         [HttpGet]
         [Route("GetKeyInfoOnDayInfo")]
-        public async Task<IActionResult> DayInfo([FromBody] GetKeyDayInfoDTO data)
+        public async Task<IActionResult> DayInfo([FromHeader] Guid KeyId, [FromHeader] DateTime day)
         {
             try
             {
-                return Ok(await _keyService.GetKeyDayInfo(data));
+                return Ok(await _keyService.GetKeyDayInfo(KeyId, day));
             }
             catch (Exception ex)
             {
