@@ -6,29 +6,21 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Keymonitoring.Migrations
 {
     /// <inheritdoc />
-    public partial class _1 : Migration
+    public partial class _2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Keys",
+                name: "Faculties",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     FacultyId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CabinetNumber = table.Column<int>(type: "integer", nullable: false),
-                    OwnerId = table.Column<Guid>(type: "uuid", nullable: true)
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Keys", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Keys_Users_OwnerId",
-                        column: x => x.OwnerId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
+                    table.PrimaryKey("PK_Faculties", x => x.FacultyId);
                 });
 
             migrationBuilder.CreateTable(
@@ -41,6 +33,60 @@ namespace Keymonitoring.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Schedule", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tokens",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    InvalidToken = table.Column<string>(type: "text", nullable: false),
+                    ExpiredDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tokens", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    FullName = table.Column<string>(type: "text", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Gender = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    CreateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    FacultyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Keys",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    FacultyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CabinetNumber = table.Column<int>(type: "integer", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uuid", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Keys", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Keys_Users_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -98,6 +144,18 @@ namespace Keymonitoring.Migrations
                 name: "IX_Keys_OwnerId",
                 table: "Keys",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_FullName",
+                table: "Users",
+                column: "FullName",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -107,10 +165,19 @@ namespace Keymonitoring.Migrations
                 name: "Applications");
 
             migrationBuilder.DropTable(
+                name: "Faculties");
+
+            migrationBuilder.DropTable(
+                name: "Tokens");
+
+            migrationBuilder.DropTable(
                 name: "Keys");
 
             migrationBuilder.DropTable(
                 name: "Schedule");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

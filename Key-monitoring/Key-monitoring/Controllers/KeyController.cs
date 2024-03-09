@@ -70,11 +70,18 @@ namespace Key_monitoring.Controllers
 
         [HttpPost]
         [Route("ChangeKeyStatus")]
+        [Authorize]
         public async Task<IActionResult> KeyStatusChange([FromBody] KeyStatusDto keyStatus)
         {
             try
             {
-                return Ok(await _keyService.ChangeKeyStatus(keyStatus.KeyId, keyStatus.UserId));
+                var token = await HttpContext.GetTokenAsync("access_token");
+                if (token == null)
+                {
+                    return BadRequest("Access token not found in the current context.");
+                }
+
+                return Ok(await _keyService.ChangeKeyStatus(Guid.Parse(User.Identity.Name), token, keyStatus.KeyId, keyStatus.UserId));
             }
             catch (Exception ex)
             {

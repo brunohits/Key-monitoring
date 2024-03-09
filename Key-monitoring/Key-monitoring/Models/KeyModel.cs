@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Key_monitoring.Enum;
+using System.ComponentModel.DataAnnotations;
 
 namespace Key_monitoring.Models;
 
@@ -16,6 +17,9 @@ public class KeyModel
     [Required]
     [MinLength(1)]
     public int CabinetNumber { get; set; }
+
+    [Required]
+    public required KeyStatusEnum Status { get; set; }
 
     public Guid? OwnerId { get; set; }
     public UserModel? Owner { get; set; }

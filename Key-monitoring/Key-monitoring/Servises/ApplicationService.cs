@@ -180,92 +180,99 @@ namespace Key_monitoring.Servises
 
         public async Task<ApplicationsListDto> GetApplicationsList(ApplicationStatusEnum? status, RoleEnum? role, int? cabinetNumber, string? partOfName, PaginationReqDTO pagination)
         {
-            var allAppl = await _dbContext.Applications.ToListAsync();
-
-            var appList = new ApplicationsListDto
+            try
             {
-                List = new List<ApplicationsListElementDTO>(),
-                Pagination = new PaginationDTO
+                var allAppl = await _dbContext.Applications.Where(x => x.Clone == false).ToListAsync();
+
+                var appList = new ApplicationsListDto
+                {
+                    List = new List<ApplicationsListElementDTO>(),
+                    Pagination = new PaginationDTO
+                    {
+                        Size = pagination.Size,
+                        Count = 0,
+                        Current = pagination.Page
+                    }
+                };
+
+                if (allAppl == null)
+                {
+                    return appList;
+                }
+
+                if (status != null)
+                {
+                    allAppl = allAppl.Where(x => x.Status == status).ToList();
+                    if (allAppl == null)
+                    {
+                        return appList;
+                    }
+                }
+
+                if (role != null)
+                {
+                    allAppl = allAppl.Where(x => x.User.Role == role).ToList();
+                    if (allAppl == null)
+                    {
+                        return appList;
+                    }
+                }
+
+                if (cabinetNumber != null)
+                {
+                    allAppl = allAppl.Where(x => x.Key.CabinetNumber == cabinetNumber).ToList();
+                    if (allAppl == null)
+                    {
+                        return appList;
+                    }
+                }
+
+                if (partOfName != null)
+                {
+                    allAppl = allAppl.Where(x => x.User.FullName.Contains(partOfName)).ToList();
+                    if (allAppl == null)
+                    {
+                        return appList;
+                    }
+                }
+
+                if ((pagination.Page - 1) * pagination.Size + 1 > allAppl.Count)
+                {
+                    throw new ArgumentException("To big pag");
+                }
+                allAppl = allAppl.Skip((pagination.Page - 1) * pagination.Size).Take(pagination.Size).ToList();
+
+                var retList = new List<ApplicationsListElementDTO>();
+                foreach (var app in allAppl)
+                {
+                    retList.Add(new ApplicationsListElementDTO
+                    {
+                        Id = app.Id,
+                        date = app.CreateTime,
+                        OwnerId = app.UserId,
+                        OwnerName = app.User.FullName,
+                        OwnerRole = app.User.Role,
+                        KeyId = app.KeyId,
+                        KeyNumber = app.Key.CabinetNumber,
+                        Repetitive = app.Repetitive,
+                        PairStart = app.Schedule.PairStart,
+                        Status = app.Status
+                    });
+                }
+
+                var pag = new PaginationDTO
                 {
                     Size = pagination.Size,
-                    Count = 0,
+                    Count = retList.Count,
                     Current = pagination.Page
-                }
-            };
+                };
 
-            if (allAppl == null ) 
-            {
-                return appList;
+                return new ApplicationsListDto { List = retList, Pagination = pag };
             }
-
-            if(status != null) 
+            catch (Exception ex)
             {
-                allAppl = allAppl.Where(x => x.Status == status).ToList();
-                if (allAppl == null)
-                {
-                    return appList;
-                }
+                throw new Exception(ex.Message);
             }
-
-            if (role != null)
-            {
-                allAppl = allAppl.Where(x => x.User.Role == role).ToList();
-                if (allAppl == null)
-                {
-                    return appList;
-                }
-            }
-
-            if (cabinetNumber != null)
-            {
-                allAppl = allAppl.Where(x => x.Key.CabinetNumber == cabinetNumber).ToList();
-                if (allAppl == null)
-                {
-                    return appList;
-                }
-            }
-
-            if (partOfName != null)
-            {
-                allAppl = allAppl.Where(x => x.User.FullName.Contains(partOfName)).ToList();
-                if (allAppl == null)
-                {
-                    return appList;
-                }
-            }
-
-            if ((pagination.Page - 1) * pagination.Size + 1 > allAppl.Count)
-            {
-                throw new ArgumentException("To big pag");
-            }
-            allAppl = allAppl.Skip((pagination.Page - 1) * pagination.Size).Take(pagination.Size).ToList();
-
-            var retList = new List<ApplicationsListElementDTO>();
-            foreach (var app in allAppl) 
-            {
-                retList.Add(new ApplicationsListElementDTO
-                {
-                    Id = app.Id,
-                    date = app.CreateTime,
-                    OwnerId = app.UserId,
-                    OwnerName = app.User.FullName,
-                    OwnerRole = app.User.Role,
-                    KeyId = app.KeyId,
-                    KeyNumber = app.Key.CabinetNumber,
-                    Repetitive = app.Repetitive,
-                    PairStart = app.Schedule.PairStart,
-                    Status = app.Status
-                });
-            }
-
-            var pag = new PaginationDTO
-            {
-                Size = pagination.Size,
-                Count = retList.Count,
-                Current = pagination.Page
-            };
-
-            return new ApplicationsListDto { List = retList, Pagination = pag };
         }
 
         public async Task<ApplicationListForUserDTO> GetApplicationsListUser(ApplicationsListUserDTO data)

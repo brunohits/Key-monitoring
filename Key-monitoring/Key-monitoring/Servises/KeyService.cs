@@ -40,6 +40,7 @@ namespace Key_monitoring.Servises
                     CreateTime = DateTime.UtcNow,
                     FacultyId = newKey.FacultyId,
                     CabinetNumber = newKey.CabinetNumber,
+                    Status = KeyStatusEnum.Available,
                     Owner = null
                 });
 
@@ -62,35 +63,26 @@ namespace Key_monitoring.Servises
                 var KeyList = new KeyListDTO();
                 foreach (var key in allKeys)
                 {
-                    KeyStatusEnum stat;
-                    if (key.Owner == null)
-                    {
-                        stat = KeyStatusEnum.Available;
-                    }
-                    else
-                    {
-                        stat = KeyStatusEnum.OnHands;
-                    }
                     Guid? ownID;
                     string? ownName;
                     RoleEnum? ownRole;
-                    if (key.Owner == null)
-                    {
-                        ownID = null;
-                        ownName = null;
-                        ownRole = null;
-                    }
-                    else
+                    if (key.Status == KeyStatusEnum.OnHands)
                     {
                         ownID = key.Owner.Id;
                         ownName = key.Owner.FullName;
                         ownRole = key.Owner.Role;
                     }
+                    else
+                    {
+                        ownID = null;
+                        ownName = null;
+                        ownRole = null;
+                    }
                     KeyList.List.Add(new KeyListElementDTO
                     {
                         Id = key.Id,
                         CabinetNumber = key.CabinetNumber,
-                        KeyStatus = stat,
+                        KeyStatus = key.Status,
                         OwnerId = ownID,
                         OwnerName = ownName,
                         OwnerRole = ownRole
@@ -160,19 +152,36 @@ namespace Key_monitoring.Servises
             }
         }
 
-        public async Task<KeyStatusEnum> ChangeKeyStatus(Guid keyId, Guid? userId)
+        public async Task<KeyStatusEnum> ChangeKeyStatus(Guid id, string token, Guid keyId, Guid? userId)
         {
             try
             {
+                var searchUser = await _dbContext.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
+                var checkToken = await _dbContext.Tokens.FirstOrDefaultAsync(x => x.InvalidToken == token);
+                if (checkToken != null)
+                {
+                    var ex = new Exception();
+                    ex.Data.Add(StatusCodes.Status401Unauthorized.ToString(), "Данный тонен устарел");
+                    throw ex;
+                }
+                if (searchUser == null)
+                {
+                    var exception = new Exception();
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Пользователь был не найден");
+                    throw exception;
+                }
+
                 var key = await _dbContext.Keys.FirstOrDefaultAsync(x => x.Id == keyId);
                 if (key == null)
                 {
-                    throw new ArgumentException("wrong key Id");
+                    var exception = new Exception();
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Ключ был не найден");
+                    throw exception;
                 }
                 if (userId == null)
                 {
-                    key.OwnerId = null;
-                    key.Owner = null;
+                    key.OwnerId = id;
+                    key.Owner = searchUser;
                     _dbContext.Keys.Update(key);
                     await _dbContext.SaveChangesAsync();
                     return KeyStatusEnum.Available;
@@ -182,7 +191,9 @@ namespace Key_monitoring.Servises
                     var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
                     if (user == null)
                     {
-                        throw new ArgumentException("wrong user Id");
+                        var exception = new Exception();
+                        exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Человек был не найден");
+                        throw exception;
                     }
                     key.OwnerId = user.Id;
                     key.Owner = user;

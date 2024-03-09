@@ -13,6 +13,6 @@ public interface IKeyService
 
     Task<KeySchInfoDTO> GetKeyInfo(Guid id, DateTime start);
 
-    Task<KeyStatusEnum> ChangeKeyStatus(Guid keyId, Guid? userId);
+    Task<KeyStatusEnum> ChangeKeyStatus(Guid id, string token, Guid keyId, Guid? userId);
     Task<KeyDayInfoDTO> GetKeyDayInfo(GetKeyDayInfoDTO data);
 }

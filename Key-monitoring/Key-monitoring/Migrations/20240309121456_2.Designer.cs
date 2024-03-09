@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Keymonitoring.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240309110208_1")]
-    partial class _1
+    [Migration("20240309121456_2")]
+    partial class _2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,6 +96,9 @@ namespace Keymonitoring.Migrations
 
                     b.Property<Guid?>("OwnerId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
