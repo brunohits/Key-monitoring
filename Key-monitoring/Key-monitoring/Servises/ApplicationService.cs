@@ -42,7 +42,9 @@ namespace Key_monitoring.Servises
                 var key = await _dbContext.Keys.FirstOrDefaultAsync(x => x.Id == data.keyId);
                 if (pair == null || user == null || key == null)
                 {
-                    throw new ArgumentException("Ahtung! Wrong ID");
+                    var exception = new Exception();
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Ahtung! Wrong ID");
+                    throw exception;
                 }
                 var newAppl = new ApplicationModel
                 {
@@ -132,7 +134,9 @@ namespace Key_monitoring.Servises
                 var appl = await _dbContext.Applications.FirstOrDefaultAsync(x => x.Id == data.id);
                 if (appl == null)
                 {
-                    throw new ArgumentException("Ahtung! Wrong ID");
+                    var exception = new Exception();
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Ahtung! Wrong ID");
+                    throw exception;
                 }
 
                 if (data.status == ApplicationStatusEnum.Approved)
@@ -238,7 +242,9 @@ namespace Key_monitoring.Servises
 
                 if ((page - 1) * size + 1 > allAppl.Count)
                 {
-                    throw new ArgumentException("To big pag");
+                    var exception = new Exception();
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "To big pag");
+                    throw exception;
                 }
                 allAppl = allAppl.Skip((page - 1) * size).Take(size).ToList();
 
@@ -301,83 +307,101 @@ namespace Key_monitoring.Servises
 
         public async Task<ApplicationListForUserDTO> GetApplicationsListUser(Guid userId, ApplicationStatusEnum? status)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
-            if (user == null)
+            try
             {
-                throw new ArgumentException("Ahtung! Wrong ID");
-            }
-            var applications = await _dbContext.Applications.Where(x => x.User == user && x.Clone == false).ToListAsync();
-
-            if(status != null)
-            {
-                applications = applications.Where(x => x.Status == status).ToList();
-            }
-
-            var retList = new List<ApplicationsListElementDTO>();
-            foreach (var app in applications)
-            {
-                var sus = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == app.UserId);
-                if (sus == null)
+                var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+                if (user == null)
                 {
                     var exception = new Exception();
-                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Человек был не найден");
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Ahtung! Wrong ID");
                     throw exception;
                 }
+                var applications = await _dbContext.Applications.Where(x => x.User == user && x.Clone == false).ToListAsync();
 
-                var usu = await _dbContext.Keys.FirstOrDefaultAsync(x => x.Id == app.KeyId);
-                if (usu == null)
+                if (status != null)
                 {
-                    var exception = new Exception();
-                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Ключ был не найден");
-                    throw exception;
+                    applications = applications.Where(x => x.Status == status).ToList();
                 }
 
-                var usus = await _dbContext.Schedule.FirstOrDefaultAsync(x => x.Id == app.ScheduleId);
-                if (usus == null)
+                var retList = new List<ApplicationsListElementDTO>();
+                foreach (var app in applications)
                 {
-                    var exception = new Exception();
-                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Пара был не найден");
-                    throw exception;
-                }
+                    var sus = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == app.UserId);
+                    if (sus == null)
+                    {
+                        var exception = new Exception();
+                        exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Человек был не найден");
+                        throw exception;
+                    }
 
-                retList.Add(new ApplicationsListElementDTO
-                {
-                    Id = app.Id,
-                    date = app.CreateTime,
-                    OwnerId = app.UserId,
-                    OwnerName = sus.FullName,
-                    OwnerRole = sus.Role,
-                    KeyId = app.KeyId,
-                    KeyNumber = usu.CabinetNumber,
-                    Repetitive = app.Repetitive,
-                    PairStart = usus.PairStart,
-                    Status = app.Status
-                });
+                    var usu = await _dbContext.Keys.FirstOrDefaultAsync(x => x.Id == app.KeyId);
+                    if (usu == null)
+                    {
+                        var exception = new Exception();
+                        exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Ключ был не найден");
+                        throw exception;
+                    }
+
+                    var usus = await _dbContext.Schedule.FirstOrDefaultAsync(x => x.Id == app.ScheduleId);
+                    if (usus == null)
+                    {
+                        var exception = new Exception();
+                        exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Пара был не найден");
+                        throw exception;
+                    }
+
+                    retList.Add(new ApplicationsListElementDTO
+                    {
+                        Id = app.Id,
+                        date = app.CreateTime,
+                        OwnerId = app.UserId,
+                        OwnerName = sus.FullName,
+                        OwnerRole = sus.Role,
+                        KeyId = app.KeyId,
+                        KeyNumber = usu.CabinetNumber,
+                        Repetitive = app.Repetitive,
+                        PairStart = usus.PairStart,
+                        Status = app.Status
+                    });
+                }
+                return new ApplicationListForUserDTO { List = retList };
             }
-            return new ApplicationListForUserDTO { List = retList };
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         public async Task<bool> ApplicationDelete(ApplicationDeleteDTO data)
         {
-            var appl = await _dbContext.Applications.FirstOrDefaultAsync(x => x.Id == data.applicationId);
-            if (appl == null)
+            try
             {
-                throw new ArgumentException("Ahtung! Wrong ID");
-            }
-
-            if (appl.Repetitive == true && appl.Clone == false)
-            {
-                var cloneApplList = await _dbContext.Applications.Where(x => x.CreateTime == appl.CreateTime && x.UserId == appl.UserId && x.KeyId == appl.KeyId && x.Clone == true).ToListAsync();
-                foreach (var applic in cloneApplList)
+                var appl = await _dbContext.Applications.FirstOrDefaultAsync(x => x.Id == data.applicationId);
+                if (appl == null)
                 {
-                    _dbContext.Applications.Remove(applic);
-                    await _dbContext.SaveChangesAsync();
+                    var exception = new Exception();
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Ahtung! Wrong ID");
+                    throw exception;
                 }
-            }
 
-            _dbContext.Applications.Remove(appl);
-            await _dbContext.SaveChangesAsync();
-            return true;
+                if (appl.Repetitive == true && appl.Clone == false)
+                {
+                    var cloneApplList = await _dbContext.Applications.Where(x => x.CreateTime == appl.CreateTime && x.UserId == appl.UserId && x.KeyId == appl.KeyId && x.Clone == true).ToListAsync();
+                    foreach (var applic in cloneApplList)
+                    {
+                        _dbContext.Applications.Remove(applic);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                }
+
+                _dbContext.Applications.Remove(appl);
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

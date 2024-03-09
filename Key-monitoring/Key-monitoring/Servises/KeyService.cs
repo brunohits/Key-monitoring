@@ -152,7 +152,9 @@ namespace Key_monitoring.Servises
                 var allpairs = await _dbContext.Schedule.Where(x => x.PairStart >= start).Take(36).ToListAsync();
                 if (allpairs.Count == 0 || allpairs == null || allpairs.Count < 36)
                 {
-                    throw new ArgumentException("Wrong week data");
+                    var exception = new Exception();
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Wrong week data");
+                    throw exception;
                 }
                 var retData = new KeySchInfoDTO
                 {
@@ -236,7 +238,9 @@ namespace Key_monitoring.Servises
                 var pairs = await _dbContext.Schedule.Where(x => x.PairStart.Date == day.Date).ToListAsync();
                 if (pairs == null || pairs.Count != 6)
                 {
-                    throw new ArgumentException("Ahtung! Wrong date");
+                    var exception = new Exception();
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Ahtung! Wrong date");
+                    throw exception;
                 }
                 var statusList = new List<KeyStatusEnum>();
 

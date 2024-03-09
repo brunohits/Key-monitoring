@@ -37,7 +37,9 @@ namespace Key_monitoring.Servises
                     var par = await _dbContext.Schedule.FirstOrDefaultAsync(x => x.PairStart.Date == start.AddDays(i).Date);
                     if(par != null)
                     {
-                        throw new ArgumentException("Wrong week data");
+                        var exception = new Exception();
+                        exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Wrong week data");
+                        throw exception;
                     }
                 }
 
@@ -102,7 +104,9 @@ namespace Key_monitoring.Servises
                 var pairs = await _dbContext.Schedule.Where(x => x.PairStart >=  start).Take(36).ToListAsync();
                 if (pairs.Count == 0 || pairs == null || pairs.Count < 36)
                 {
-                    throw new ArgumentException("Wrong week data");
+                    var exception = new Exception();
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Wrong week data");
+                    throw exception;
                 }
                 return new WeekDTO{ pairs = pairs };
             }
