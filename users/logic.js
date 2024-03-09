@@ -24,8 +24,6 @@ async function get(url) {
       console.error('Ошибка', error);
     });
 }
-const url = `https://localhost:7266/api/account/Search/Users?Size=20`;
-get(url)
 
 //--------------------------------------------------------------
 
@@ -106,13 +104,17 @@ function formatDataTime(originalDate) {
 }
 
 //----------------------------------------------------------------------
+async function working() {
+  const url = `https://localhost:7266/api/account/Search/Users?Size=20`;
+  get(url)
 
-const inputName = document.getElementById('inputName');
-const searchButton = document.getElementById('searchButton');
+  const inputName = document.getElementById('inputName');
+  const searchButton = document.getElementById('searchButton');
 
-searchButton.addEventListener('click', () => {
-  searchPatients();
-});
+  searchButton.addEventListener('click', () => {
+    searchPatients();
+  });
+}
 
 //----------------------------------------------------------------------
 
@@ -254,17 +256,23 @@ async function put(id, role, token) {
 //--------------------------------------------------------
 async function getOfficeName(url, token) {
   return fetch(url, {
-      method: 'GET',
-      headers: new Headers({
-          "Authorization": `Bearer ${token}`
-      }),
+    method: 'GET',
+    headers: new Headers({
+      "Authorization": `Bearer ${token}`
+    }),
   })
-      .then(response => response.json())
-      .then(async data => {
-          console.log(data);
-          document.getElementById('user').textContent = data.fullName;
-      })
-      .catch(error => {
-          console.error('Ошибка', error);
-      });
+    .then(response => response.json())
+    .then(async data => {
+      console.log(data);
+      document.getElementById('user').textContent = data.fullName;
+      if (data.role === 'DeanOffice'){
+        working();
+      }
+      else{
+        alert('Вы не являетесь деканом');
+      }
+    })
+    .catch(error => {
+      console.error('Ошибка', error);
+    });
 }
