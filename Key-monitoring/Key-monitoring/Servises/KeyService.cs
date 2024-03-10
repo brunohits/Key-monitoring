@@ -162,8 +162,8 @@ namespace Key_monitoring.Servises
         {
             try
             {
-                var allpairs = await _dbContext.Schedule.Where(x => x.PairStart >= start).Take(36).ToListAsync();
-                if (allpairs.Count == 0 || allpairs == null || allpairs.Count < 36)
+                var allpairs = await _dbContext.Schedule.OrderBy(x => x.PairStart).Where(x => x.PairStart >= start).Take(36).ToListAsync();
+                if (allpairs.Count == 0 || allpairs == null || allpairs.Count < 36 || allpairs[0].PairStart.Date != start.Date)
                 {
                     var exception = new Exception();
                     exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Wrong week data");
