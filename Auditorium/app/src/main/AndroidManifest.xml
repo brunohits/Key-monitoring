@@ -21,9 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Auditorium"
         tools:targetApi="30">
-        <activity
-            android:name=".BookingActivity"
-            android:exported="false" />
+<!--        <activity-->
+<!--            android:name=".BookingActivity"-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".AuditoryActivity"
             android:exported="false" />
@@ -34,7 +34,7 @@
             android:name=".AuthActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".BookingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
