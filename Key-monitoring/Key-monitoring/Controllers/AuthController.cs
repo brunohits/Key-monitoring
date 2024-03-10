@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Key_monitoring.DTOs;
 using Key_monitoring.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -29,19 +30,6 @@ namespace Key_monitoring.Controllers
         {
             try
             {
-
-                if (!IsValidEmail(userRegister.Email))
-                {
-                    return BadRequest("Неверный формат email.");
-                }
-
-
-                if (!IsValidPhoneNumber(userRegister.PhoneNumber))
-                {
-                    return BadRequest("Неверный формат телефонного номера. Используйте формат +7xxxxxxxxxx.");
-                }
-
-
                 var token = await _authService.Register(userRegister);
                 return Ok(token);
             }
@@ -72,25 +60,6 @@ namespace Key_monitoring.Controllers
             }
         }
 
-
-
-        private bool IsValidEmail(string email)
-        {
-
-            string emailPattern = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$";
-            return Regex.IsMatch(email, emailPattern);
-        }
-
-        // Проверка формата телефонного номера
-        private bool IsValidPhoneNumber(string phoneNumber)
-        {
-
-            string phonePattern = @"^\+7\d{10}$";
-            return Regex.IsMatch(phoneNumber, phonePattern);
-        }
-
-
-
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginDTO forSuccessfulLogin)
         {
@@ -119,10 +88,8 @@ namespace Key_monitoring.Controllers
             catch (Exception ex)
             {
 
-                Console.WriteLine($"An error occurred while logging in: {ex}");
-
-
-                return StatusCode(400, "An error occurred while logging in. Please check the console for more details.");
+              //  Console.WriteLine($"An error occurred while logging in: {ex}");
+                return StatusCode(400, "Неверные данные");
             }
         }
 
@@ -152,7 +119,74 @@ namespace Key_monitoring.Controllers
             }
         }
 
-        
+        [Authorize]
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetInfoAboutUser()
+        {
+            string token = await HttpContext.GetTokenAsync("access_token");
+           
+            try{
+                var result = await _authService.GetInfoUser(Guid.Parse(User.Identity.Name), token);
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                if (ex.Data.Contains(StatusCodes.Status400BadRequest.ToString()))
+                {
+                    return BadRequest(ex.Data[StatusCodes.Status400BadRequest.ToString()]);
+                }
+                else if (ex.Data.Contains(StatusCodes.Status404NotFound.ToString()))
+                {
+                    return NotFound(ex.Data[StatusCodes.Status404NotFound.ToString()]);
+                }
+                else if (ex.Data.Contains(StatusCodes.Status401Unauthorized.ToString()))
+                {
+                    return Unauthorized(StatusCodes.Status401Unauthorized.ToString());
+                }
+                return StatusCode(500, "Внутренняя ошибка сервера.");
+            }
+        }
+
+        [Authorize]
+        [HttpGet("Change/Profile")]
+        public async Task<IActionResult> ChangeUserInfo(ChangeUserInfoDTO changeUserInfoDto)
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            try
+            {
+
+                if (!User.Identity.IsAuthenticated || !Guid.TryParse(User.Identity.Name, out Guid userId))
+                {
+                    return Unauthorized("User is not authenticated");
+                }
+
+                await _authService.ChangeInfoAboutUser(userId, changeUserInfoDto, token);
+
+                return Ok("Profile updated successfully");
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("User not found");
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                if (ex.Message == "Token is already invalid")
+                {
+                    return Unauthorized("Token is invalid");
+                }
+                throw; 
+            }
+            catch (Exception ex)
+            {
+                if (ex.Data.Contains(StatusCodes.Status409Conflict.ToString()))
+                {
+                    return Conflict(ex.Message);
+                }
+
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request");
+            }
+        }
+
     }
 }
 

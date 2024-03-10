@@ -2,24 +2,40 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workbench ActiveDocument="Key-monitoring/Program.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.Key-monitoring PreferredExecutionTarget="/Applications/Yandex.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Key-monitoring/Enum/RoleEnum.cs">
     <Files>
-      <File FileName="Key-monitoring/Program.cs" Line="3" Column="12" />
+      <File FileName="Key-monitoring/Program.cs" />
+      <File FileName="Key-monitoring/appsettings.json" />
+      <File FileName="Key-monitoring/Servises/AuthService.cs" />
+      <File FileName="Key-monitoring/Controllers/AuthController.cs" />
+      <File FileName="Key-monitoring/Interfaces/IAuthService.cs" />
+      <File FileName="Key-monitoring/DTOs/UserRegisterDTO.cs" />
+      <File FileName="Key-monitoring/DTOs/UserDTO.cs" />
+      <File FileName="Key-monitoring/DTOs/UserLoginDTO.cs" />
+      <File FileName="Key-monitoring/DTOs/TokenDTO.cs" />
+      <File FileName="Key-monitoring/Servises/TokenConfigurations.cs" />
+      <File FileName="Key-monitoring/ApplicationDbContext/ApplicationDbContext.cs" />
+      <File FileName="Key-monitoring/Models/UserModel.cs" />
+      <File FileName="Key-monitoring/Models/FacultyModel.cs" />
+      <File FileName="Key-monitoring/Servises/UserService.cs" Line="31" Column="46" />
+      <File FileName="Key-monitoring/Servises/DeansOffice.cs" Line="45" Column="31" />
+      <File FileName="Key-monitoring/Enum/RoleEnum.cs" Line="6" Column="17" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="Key-monitoring" expanded="True">
             <Node name="Key-monitoring" expanded="True">
-              <Node name="Program.cs" selected="True" />
+              <Node name="Enum" expanded="True" />
+              <Node name="Servises" expanded="True" />
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.ItemProperties.Key-monitoring PreferredExecutionTarget="/Applications/Yandex.app" />
-  <MultiItemStartupConfigurations />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

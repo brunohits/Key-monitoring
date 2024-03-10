@@ -1,0 +1,47 @@
+﻿<Properties StartupConfiguration="{D1948FF6-B306-46C8-B714-AFCCD90A7CFD}|https">
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Key-monitoring/Servises/AuthService.cs">
+    <Files>
+      <File FileName="Key-monitoring/Program.cs" Line="40" Column="1" />
+      <File FileName="Key-monitoring/Servises/AuthService.cs" Line="266" Column="67" />
+      <File FileName="Key-monitoring/Interfaces/IAuthService.cs" Line="10" Column="3" />
+      <File FileName="Key-monitoring/Controllers/AuthController.cs" Line="45" Column="1" />
+      <File FileName="Key-monitoring/Servises/TokenConfigurations.cs" Line="1" Column="1" />
+      <File FileName="Key-monitoring/appsettings.json" Line="13" Column="1" />
+      <File FileName="Key-monitoring/ApplicationDbContext/ApplicationDbContext.cs" Line="8" Column="34" />
+      <File FileName="Key-monitoring/Properties/launchSettings.json" Line="1" Column="1" />
+      <File FileName="Key-monitoring/appsettings.Development.json" Line="3" Column="71" />
+      <File FileName="Key-monitoring/Mapping/Mapping.cs" Line="9" Column="19" />
+      <File FileName="Key-monitoring/Models/TokenModel.cs" Line="15" Column="2" />
+      <File FileName="Key-monitoring/Models/UserModel.cs" Line="29" Column="2" />
+      <File FileName="Key-monitoring/Enum/EmptyClass.cs" Line="6" Column="25" />
+      <File FileName="Key-monitoring/Enum/GenderEnum.cs" Line="1" Column="1" />
+      <File FileName="Key-monitoring/Models/FacultyModel.cs" Line="1" Column="1" />
+      <File FileName="Key-monitoring/DTOs/UserRegisterDTO.cs" Line="5" Column="14" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Key-monitoring">
+            <Node name="Key-monitoring">
+              <Node name="Controllers" expanded="True" />
+              <Node name="DTOs" expanded="True" />
+              <Node name="Enum" expanded="True" />
+              <Node name="Interfaces" expanded="True" />
+              <Node name="Mapping" expanded="True" />
+              <Node name="Migrations" expanded="True" />
+              <Node name="Servises" expanded="True" />
+              <Node name="appsettings.json" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Key-monitoring PreferredExecutionTarget="/Applications/Yandex.app" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+</Properties>
