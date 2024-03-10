@@ -28,7 +28,7 @@ document.getElementById('login').addEventListener('click', function (event) {
     if (data.token) {
         token = data.token;
         localStorage.setItem('token', token);
-        //window.location.href = '../patients/patients.html';
+        window.location.href = '/keysStatus/keys status.html';
       } else {
         alert('Неверный логин или пароль');
       }
