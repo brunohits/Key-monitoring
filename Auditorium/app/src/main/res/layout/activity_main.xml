@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#ffffff"
-    tools:context=".MainActivity"
-    android:dividerPadding="8dp">
+    android:fillViewport="true"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+
 
 
     <TextView
         android:layout_width="245dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="30dp"
         android:fontFamily="@font/inter_bold"
         android:text="Создайте аккаунт"
         android:textColor="#000000"
@@ -26,7 +31,7 @@
         android:layout_width="220dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="ФИО"
         android:inputType="text"
@@ -40,22 +45,51 @@
         android:ems="10"
         android:inputType="textEmailAddress"
         android:textColorHint="#6a6a6a"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:textColor="#000000"
         android:hint="Введите email" />
 
     <EditText
+
         android:id="@+id/user_pass"
         android:layout_width="220dp"
         android:layout_height="50dp"
         android:ems="10"
         android:inputType="textPassword"
         android:textColorHint="#6a6a6a"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:textColor="#000000"
         android:hint="Введите пароль "/>
+
+    <DatePicker
+        android:id="@+id/user_birth"
+        android:layout_width="270dp"
+        android:layout_height="360dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp" />
+
+    <Spinner
+        android:layout_width="220dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:id="@+id/gender_spinner"
+        android:entries="@array/gender_options"/>
+
+
+
+    <EditText
+        android:id="@+id/phone_number_edit_text"
+        android:layout_width="220dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:hint="введите номер телефона"
+        android:inputType="phone"/>
+
+
 
     <Button
         android:id="@+id/button_reg"
@@ -74,9 +108,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/inter_medium"
         android:text="Авторизоваться"
         android:textColor="#8F8D8D"
         android:textSize="17sp" />
 </LinearLayout>
+
+</ScrollView>

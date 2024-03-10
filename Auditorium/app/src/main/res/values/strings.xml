@@ -10,4 +10,16 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+
+
+    <string-array name="gender_options">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+    <string-array name="faculty_options">
+        <item> 8bc4614c-f8c1-48f1-a82a-ff0ae807ea16 </item>
+    </string-array>
+
+
 </resources>

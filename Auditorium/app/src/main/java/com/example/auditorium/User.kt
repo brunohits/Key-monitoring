@@ -1,5 +1,17 @@
 package com.example.auditorium
 
-class User(val login:String,val email:String,val pass:String) {
 
-}
+data class User(
+    val fullName: String,
+    val email: String,
+    val password: String,
+    val birthDate: String,
+    val gender: String,
+    val phoneNumber: String,
+    val facultyId: String,
+)
+
+
+data class AuthResponse(
+    val token: String
+)
