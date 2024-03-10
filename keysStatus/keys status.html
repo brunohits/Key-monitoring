@@ -79,7 +79,36 @@
 
         <!-- Main Content-->
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 shadow rounded">
-            <h2 class="mb-4  mt-5 ms-4">Ключи</h2>
+            <h2 class="mb-4  mt-5 ms-4">Ключи
+                <button type="button" class="btn btn-outline-primary float-end" data-bs-toggle="modal" data-bs-target="#createKeyModal">
+                    Создать ключ
+                </button>
+
+                <div class="modal fade" id="createKeyModal" tabindex="-1" aria-labelledby="createKeyModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="createKeyModalLabel">Создание ключа</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                        <!-- Форма для ввода кабинета -->
+                        <form>
+                            <div class="mb-3">
+                            <label for="keyName" class="form-label">Номер кабинета</label>
+                            <input type="text" class="form-control" id="keyName">
+                            </div>
+                        </form>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <button type="button" class="btn btn-primary" onclick="createKey()">Создать</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+            </h2>
             <div class="mx-0">
                 <div class="row mx-3 element">
                     

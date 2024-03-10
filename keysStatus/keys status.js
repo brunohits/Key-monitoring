@@ -174,5 +174,35 @@ function createScheduleTable(scheduleData, idKey) {
     currentDayElement.appendChild(table);
 }
 
-// Call the function with your data
-createScheduleTable(scheduleData, 'yourIdKey');
+
+//---------------------------------------------------------------------------------------------
+async function createKey() {
+    try {
+        const keyName = document.getElementById('keyName').value;
+        console.log(keyName);
+        const url = 'https://localhost:7266/api/key/CreateKey';
+        let data = {
+            cabinetNumber: keyName
+        };
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        console.log(result);
+        location.reload();
+
+    } catch (error) {
+        console.error('Ошибка', error);
+    }
+}
