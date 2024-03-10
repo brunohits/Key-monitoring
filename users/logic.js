@@ -269,10 +269,13 @@ async function getOfficeName(url, token) {
         working();
       }
       else{
-        alert('Вы не являетесь деканом');
+        alert('Ошибка доступа');
+        window.location.href = '/autorization/autorization.html';
       }
     })
     .catch(error => {
       console.error('Ошибка', error);
+      alert('Ошибка доступа');
+      window.location.href = '/autorization/autorization.html';
     });
 }

@@ -222,11 +222,13 @@ async function getOfficeName(url, token) {
         console.log(data);
         document.getElementById('user').textContent = data.fullName;
         if (data.role !== 'DeanOffice'){
-            alert('Вы не являетесь деканом');
+            alert('Ошибка доступа');
             window.location.href = '/autorization/autorization.html';
         }
       })
       .catch(error => {
         console.error('Ошибка', error);
+        alert('Ошибка доступа');
+        window.location.href = '/autorization/autorization.html';
       });
   }
