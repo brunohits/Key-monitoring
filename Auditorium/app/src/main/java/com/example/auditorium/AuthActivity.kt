@@ -15,12 +15,15 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONException
 import org.json.JSONObject
+import android.content.Context
+import android.content.SharedPreferences
 
 class AuthActivity : AppCompatActivity() {
-    lateinit var userLogin: EditText
-    lateinit var userPass: EditText
-    lateinit var linkToReg: TextView
+    private lateinit var userLogin: EditText
+    private lateinit var userPass: EditText
+    private lateinit var linkToReg: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,17 +65,50 @@ class AuthActivity : AppCompatActivity() {
                 val responseData = response.body?.string()
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        Toast.makeText(this@AuthActivity, "Вход выполнен успешно", Toast.LENGTH_SHORT).show()
+                        val token = extractToken(responseData)
+                        saveToken(token)
+                        Toast.makeText(
+                            this@AuthActivity,
+                            "Вход выполнен успешно",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     } else {
-                        Toast.makeText(this@AuthActivity, "Ошибка при входе: $responseData", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@AuthActivity,
+                            "Ошибка при входе: $responseData",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@AuthActivity, "Ошибка при выполнении запроса: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@AuthActivity,
+                        "Ошибка при выполнении запроса: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
     }
+
+
+    private fun extractToken(responseData: String?): String? {
+        return try {
+            val jsonObject = JSONObject(responseData)
+            jsonObject.getString("token")
+        } catch (e: JSONException) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun saveToken(token: String?) {
+        val sharedPreferences: SharedPreferences = getSharedPreferences("auth", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("token", token)
+        editor.apply()
+    }
 }
+

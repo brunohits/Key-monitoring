@@ -1,7 +1,9 @@
 package com.example.auditorium
 
+import TrustAllCerts
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.EditText
@@ -13,10 +15,16 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.util.Calendar
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,9 +49,15 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val okHttpClient = OkHttpClient.Builder()
+            .sslSocketFactory(TrustAllCerts.createSSLSocketFactory(), TrustAllCerts)
+            .hostnameVerifier { _, _ -> true }
+            .build()
+
         retrofit = Retrofit.Builder()
-            .baseUrl("https://localhost:7266/") // Замените на ваш URL
+            .baseUrl("https://10.0.2.2:7266/")
             .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
             .build()
 
         apiService = retrofit.create(ApiService::class.java)
@@ -53,9 +67,11 @@ class MainActivity : AppCompatActivity() {
             val email = userEmail.text.toString().trim()
             val password = userPass.text.toString().trim()
             val phoneNumber = userPhone.text.toString().trim()
-            val birth =
-                "${userBirth.year}-${userBirth.month + 1}-${userBirth.dayOfMonth}"
+            val birth = getFormattedBirthDate(userBirth)
             val genderUser = gender.selectedItem.toString()
+
+            Log.d("RegistrationData", "FullName: $fullName, Email: $email, Password: $password, PhoneNumber: $phoneNumber, BirthDate: $birth, Gender: $genderUser")
+
 
             if (!isValidPhoneNumber(phoneNumber)) {
                 showToast("Неправильный формат телефона")
@@ -68,18 +84,28 @@ class MainActivity : AppCompatActivity() {
             }
 
             val user = User(
-                fullName = fullName,
+                fullName = fullName ,
                 email = email,
                 password = password,
                 birthDate = birth,
                 gender = genderUser,
                 phoneNumber = phoneNumber,
-                facultyId = "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+                facultyId = "8bc4614c-f8c1-48f1-a82a-ff0ae807ea16"
             )
 
             registerUser(user)
         }
     }
+
+    private fun getFormattedBirthDate(datePicker: DatePicker): String {
+        val calendar = Calendar.getInstance()
+        calendar.set(datePicker.year, datePicker.month, datePicker.dayOfMonth)
+        val birthDate = calendar.time
+
+        val serverDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        return serverDateFormat.format(birthDate)
+    }
+
 
     private fun registerUser(user: User) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -88,10 +114,12 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     showToast("Пользователь успешно зарегистрирован")
                 } else {
-                    showToast("Ошибка при регистрации: ${response.message()}")
+                    showToast("Ошибка при регистрации:  ${response.errorBody()?.string()}")
                 }
             } catch (e: Exception) {
-                showToast("Ошибка при выполнении запроса: ${e.message}")
+                val errorMessage = "Ошибка при выполнении запроса: ${e.message}"
+                println(errorMessage)
+                showToast(errorMessage)
             }
         }
     }
