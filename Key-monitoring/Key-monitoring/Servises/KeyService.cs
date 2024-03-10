@@ -89,27 +89,18 @@ namespace Key_monitoring.Servises
                     Guid? ownID;
                     string? ownName;
                     RoleEnum? ownRole;
-                    if (key.Status == KeyStatusEnum.OnHands)
-                    {
-                        var own = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == key.OwnerId);
 
-                        if (own == null)
-                        {
-                            var exception = new Exception();
-                            exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Человек был не найден");
-                            throw exception;
-                        }
-
-                        ownID = key.OwnerId;
-                        ownName = own.FullName;
-                        ownRole = own.Role;
-                    }
-                    else
+                    var own = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == key.OwnerId);
+                    if (own == null)
                     {
-                        ownID = null;
-                        ownName = null;
-                        ownRole = null;
+                        var exception = new Exception();
+                        exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Человек был не найден");
+                        throw exception;
                     }
+                    ownID = key.OwnerId;
+                    ownName = own.FullName;
+                    ownRole = own.Role;
+
                     var newKeyEl = new KeyListElementDTO
                     {
                         Id = key.Id,
