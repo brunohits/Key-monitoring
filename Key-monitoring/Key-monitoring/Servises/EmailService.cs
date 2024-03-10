@@ -109,39 +109,17 @@ public class EmailService : IEmail
         else
         {
             var own = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == checkCode.IdFromAdress);
-            if (own == null)
-            {
-                var exception = new Exception();
-                exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Ahtung! User not found");
-                throw exception;
-            }
-
-            var pairs = await _dbContext.Schedule.Where(x => x.PairStart <= DateTime.UtcNow).ToListAsync();
-
-            if (pairs == null || pairs.Count == 0)
-            {
-                throw new ArgumentException("Расписание такого нет");
-            }
-
-            pairs = pairs.OrderByDescending(x => x.PairStart).ToList();
-
-            var applic = await _dbContext.Applications.FirstOrDefaultAsync(
-                x => x.KeyId == searchRoom.Id &&
-                x.UserId == searchRoom.OwnerId &&
-                x.ScheduleId == pairs[0].Id &&
-                x.Status == ApplicationStatusEnum.Approved);
-
-            if (applic == null)
-            {
-                throw new ArgumentException("Заявки такой нет");
-            }
-
-            applic.Status = ApplicationStatusEnum.KeyGiven;
-            _dbContext.Applications.Update(applic);
-            _dbContext.SaveChanges();
 
             searchRoom.Owner = own;
             searchRoom.OwnerId = checkCode.IdFromAdress;
+            if(own.Role == RoleEnum.DeanOffice)
+            {
+                searchRoom.Status = KeyStatusEnum.Available;
+            }
+            else
+            {
+                searchRoom.Status = KeyStatusEnum.OnHands;
+            }
             searchRoom.Status = KeyStatusEnum.OnHands;
             await _dbContext.SaveChangesAsync();
             _dbContext.CodeForEmails.Remove(checkCode);
