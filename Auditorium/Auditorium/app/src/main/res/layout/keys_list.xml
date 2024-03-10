@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".AuditoryActivity"
+    tools:context=".KeyActivity"
     android:background="#1E90FF">
 
     <TextView
@@ -14,17 +14,18 @@
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/inter_bold"
-        android:text="Выберите аудиторию"
+        android:text="Ваши ключи"
         android:textColor="@color/white"
         android:textSize="25sp"
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/audi_list"
+        android:id="@+id/key_list"
         android:layout_width="match_parent"
-        android:layout_height="637dp"
+        android:layout_height="580dp"
         android:layout_marginHorizontal="15dp"
         android:layout_marginVertical="15dp" />
+
 
 
 </LinearLayout>
