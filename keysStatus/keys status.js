@@ -1,6 +1,8 @@
 var token = localStorage.getItem('token');
 console.log(token)
 
+getOfficeName('https://localhost:7266/api/account/profile', token);
+
 const url = `https://localhost:7266/api/key/GetFullKeyList`;
 get(url);
 
@@ -206,3 +208,25 @@ async function createKey() {
         console.error('Ошибка', error);
     }
 }
+
+//--------------------------------------------------------
+async function getOfficeName(url, token) {
+    return fetch(url, {
+      method: 'GET',
+      headers: new Headers({
+        "Authorization": `Bearer ${token}`
+      }),
+    })
+      .then(response => response.json())
+      .then(async data => {
+        console.log(data);
+        document.getElementById('user').textContent = data.fullName;
+        if (data.role !== 'DeanOffice'){
+            alert('Вы не являетесь деканом');
+            window.location.href = '/autorization/autorization.html';
+        }
+      })
+      .catch(error => {
+        console.error('Ошибка', error);
+      });
+  }
