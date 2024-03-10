@@ -6,8 +6,7 @@ namespace Key_monitoring.Enum
         UnderConsideration,
         Approved,
         Denied,
-        KeyGive,
-        KeyTake
+        KeyGiven
     }
 }
 
