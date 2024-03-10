@@ -21,8 +21,9 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <!-- Top Nav content here -->
         </div>
-        <div id="user">
-            <button class="btn btn-outline-primary" id="user">Название деканата</button>
+        <div id="">
+            <button class="btn btn-outline-primary" id="user">
+            </button>
         </div>
     </div>
 </nav>
@@ -61,21 +62,15 @@
 
             <div class="mb-4 ms-4">
                 <label for="keySelect" class="form-label">Выберите ключ:</label>
-                <select class="form-select" id="keySelect">
+                <select class="form-select" id="keysDropdown">
                     <option selected disabled>Выберите ключ</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
                 </select>
             </div>
 
             <div class="mb-4 ms-4">
                 <label for="userSelect" class="form-label">Выберите пользователя, которому передаёте ключ:</label>
-                <select class="form-select" id="userSelect">
+                <select class="form-select" id="usersDropdown">
                     <option selected disabled>Выберите пользователя</option>
-                    <option value="222">Пользователь 1</option>
-                    <option value="224">Пользователь 2</option>
-                    <option value="234">Пользователь 3</option>
                 </select>
             </div>
 
@@ -102,6 +97,7 @@
                     </div>
                 </div>
             </div>
+            
             <script>
                 document.getElementById('transferKeyBtn').addEventListener('click', function() {
                     var userSelect = document.getElementById('userSelect');
@@ -132,6 +128,9 @@
 
 <!-- Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script scr="keyTranser.js"
+<script src="/logout.js"></script>
 
 
 </body>
