@@ -91,10 +91,17 @@ namespace Key_monitoring.Servises
                 keyList.List = new List<OneKeyDTO>();
                 foreach (var key in allKeys)
                 {
+                    var fakul = await _dbContext.Faculties.FirstOrDefaultAsync(x => x.FacultyId == key.FacultyId);
+                    if (fakul == null)
+                    {
+                        var exception = new Exception();
+                        exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "А факультета то нету");
+                        throw exception;
+                    }
                     keyList.List.Add(new OneKeyDTO
                     {
                         Id = key.Id,
-                        FacultyId = key.FacultyId,
+                        FacultyName = fakul.Name,
                         Number = key.CabinetNumber
                     });
                 }
