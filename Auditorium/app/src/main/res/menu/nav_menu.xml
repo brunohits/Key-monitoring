@@ -8,30 +8,25 @@
         android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_home"
-            android:title="Home"/>
+            android:id="@+id/nav_keys"
+            android:title="Ключи"/>
 
         <item
-            android:id="@+id/nav_settings"
-            android:title="Settings"/>
+            android:id="@+id/nav_requests"
+            android:title="Заявки"/>
 
         <item
-            android:id="@+id/nav_share"
-            android:title="Share"/>
+            android:id="@+id/nav_auditories"
+            android:title="Аудитории"/>
 
-        <item
-            android:id="@+id/nav_about"
-            android:title="About Us"/>
+
     </group>
     <item
         android:title="">
-
         <menu>
             <item
                 android:id="@+id/nav_logout"
-                android:title="Logout"/>
+                android:title="Выйти"/>
         </menu>
-
     </item>
-
 </menu>

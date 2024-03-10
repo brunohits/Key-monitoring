@@ -12,6 +12,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         val userLogin = findViewById<EditText>(R.id.user_login)
         val userEmail = findViewById<EditText>(R.id.user_email)
@@ -89,8 +91,17 @@ class MainActivity : AppCompatActivity() {
                 facultyId = "8bc4614c-f8c1-48f1-a82a-ff0ae807ea16"
             )
 
+            val navigationView = findViewById<NavigationView>(R.id.nav_view)
+            val headerView = navigationView.getHeaderView(0)
+            val usernameTextView = headerView.findViewById<TextView>(R.id.user_name)
+            usernameTextView.text = "serega"
+
             registerUser(user)
+
+
         }
+
+
     }
 
     private fun getFormattedBirthDate(datePicker: DatePicker): String {
