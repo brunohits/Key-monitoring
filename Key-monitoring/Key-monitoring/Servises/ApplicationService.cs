@@ -182,7 +182,7 @@ namespace Key_monitoring.Servises
             }
         }
 
-        public async Task<ApplicationsListDto> GetApplicationsList(ApplicationStatusEnum? status, RoleEnum? role, int? cabinetNumber, string? partOfName, int page, int size)
+        public async Task<ApplicationsListDto> GetApplicationsList(ApplicationStatusEnum? status, RoleEnum? role, int? cabinetNumber, string? partOfName, ApplicationSortEnum sort, int page, int size)
         {
             try
             {
@@ -238,6 +238,16 @@ namespace Key_monitoring.Servises
                     {
                         return appList;
                     }
+                }
+
+                switch(sort)
+                {
+                    case ApplicationSortEnum.CreateAsc:
+                        allAppl = allAppl.OrderBy(x => x.CreateTime).ToList();
+                        break;
+                    case ApplicationSortEnum.CreateDesc:
+                        allAppl = allAppl.OrderByDescending(x => x.CreateTime).ToList();
+                        break;
                 }
 
                 if ((page - 1) * size + 1 > allAppl.Count)

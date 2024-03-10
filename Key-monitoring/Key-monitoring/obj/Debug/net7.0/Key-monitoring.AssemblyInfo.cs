@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Key-monitoring")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+428ff48e626408d318a8cfd0dce51b53b74cd524")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+61aad5db0785e9ef5655e81139417a0b14fbfa2c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Key-monitoring")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Key-monitoring")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

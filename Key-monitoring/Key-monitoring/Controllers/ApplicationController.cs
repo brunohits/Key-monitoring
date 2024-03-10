@@ -57,11 +57,11 @@ namespace Key_monitoring.Controllers
 
         [HttpGet]
         [Route("applicationsList")]
-        public async Task<IActionResult> ApplicationsList([FromHeader] ApplicationStatusEnum? status, [FromHeader] RoleEnum? role, [FromHeader] int? cabinetNumber, [FromHeader] string? partOfName, [FromHeader] int page, [FromHeader] int size)
+        public async Task<IActionResult> ApplicationsList([FromHeader] ApplicationStatusEnum? status, [FromHeader] RoleEnum? role, [FromHeader] int? cabinetNumber, [FromHeader] string? partOfName, [FromHeader] ApplicationSortEnum sort, [FromHeader] int page, [FromHeader] int size)
         {
             try
             {
-                return Ok(await _applicationService.GetApplicationsList(status, role, cabinetNumber, partOfName, page, size));
+                return Ok(await _applicationService.GetApplicationsList(status, role, cabinetNumber, partOfName, sort, page, size));
             }
             catch (Exception ex)
             {
