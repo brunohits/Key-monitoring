@@ -26,11 +26,18 @@ namespace Key_monitoring.Controllers
 
         [HttpPost]
         [Route("CreateKey")]
+        [Authorize]
         public async Task<IActionResult> CreateKey([FromBody] KeyCreateDTO newKey)
         {
             try
             {
-                return Ok(await _keyService.CreateKey(newKey));
+                var token = await HttpContext.GetTokenAsync("access_token");
+                if (token == null)
+                {
+                    return BadRequest("Access token not found in the current context.");
+                }
+
+                return Ok(await _keyService.CreateKey(Guid.Parse(User.Identity.Name), token, newKey));
             }
             catch (Exception ex)
             {

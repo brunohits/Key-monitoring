@@ -8,7 +8,7 @@ namespace Key_monitoring.Interfaces;
 
 public interface IKeyService
 { 
-    Task<Guid> CreateKey(KeyCreateDTO newKey);
+    Task<Guid> CreateKey(Guid id, string token, KeyCreateDTO newKey);
 
     Task<KeyListDTO> GetList();
 

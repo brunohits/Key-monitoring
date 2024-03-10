@@ -29,10 +29,31 @@ namespace Key_monitoring.Servises
         }
 
 
-        public async Task<Guid> CreateKey(KeyCreateDTO newKey)
+        public async Task<Guid> CreateKey(Guid id, string token, KeyCreateDTO newKey)
         {
             try
             {
+                var searchUser = await _dbContext.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
+                var checkToken = await _dbContext.Tokens.FirstOrDefaultAsync(x => x.InvalidToken == token);
+                if (checkToken != null)
+                {
+                    var ex = new Exception();
+                    ex.Data.Add(StatusCodes.Status401Unauthorized.ToString(), "Данный тонен устарел");
+                    throw ex;
+                }
+                if (searchUser == null)
+                {
+                    var exception = new Exception();
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Пользователь был не найден");
+                    throw exception;
+                }
+                if (searchUser.Role != RoleEnum.DeanOffice)
+                {
+                    var exception = new Exception();
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Ты не ДЕКАН");
+                    throw exception;
+                }
+
                 var newId = Guid.NewGuid();
                 await _dbContext.KeyModels.AddAsync(new KeyModel
                 {
@@ -41,7 +62,8 @@ namespace Key_monitoring.Servises
                     FacultyId = newKey.FacultyId,
                     CabinetNumber = newKey.CabinetNumber,
                     Status = KeyStatusEnum.Available,
-                    Owner = null
+                    Owner = searchUser,
+                    OwnerId = searchUser.Id
                 });
 
                 await _dbContext.SaveChangesAsync();

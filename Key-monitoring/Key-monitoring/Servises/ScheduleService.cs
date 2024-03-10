@@ -43,7 +43,7 @@ namespace Key_monitoring.Servises
                     }
                 }
 
-                var modifiedStart = new DateTime(start.Year, start.Month, start.Day, 0, 0, 0);
+                var modifiedStart = new DateTime(start.Year, start.Month, start.Day, 0, 0, 0, DateTimeKind.Utc);
 
                 var newPairsList = new List<ScheduleModel>();
                 for(int i = 0;i < 6; ++i) 
