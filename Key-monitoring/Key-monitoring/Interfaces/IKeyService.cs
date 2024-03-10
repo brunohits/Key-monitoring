@@ -9,11 +9,9 @@ namespace Key_monitoring.Interfaces;
 public interface IKeyService
 { 
     Task<Guid> CreateKey(Guid id, string token, KeyCreateDTO newKey);
-
+    Task<AllKeysDTO> GetAllKeys();
     Task<KeyListDTO> GetList();
-
     Task<KeySchInfoDTO> GetKeyInfo(Guid id, DateTime start);
-
     Task<KeyStatusEnum> ChangeKeyStatus(Guid id, string token, Guid keyId, Guid? userId);
     Task<KeyDayInfoDTO> GetKeyDayInfo(Guid KeyId, DateTime day);
 }

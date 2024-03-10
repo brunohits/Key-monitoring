@@ -76,6 +76,36 @@ namespace Key_monitoring.Servises
             }
         }
 
+        public async Task<AllKeysDTO> GetAllKeys()
+        {
+            try
+            {
+                var allKeys = await _dbContext.KeyModels.OrderBy(x => x.CabinetNumber).ToListAsync();
+                if(allKeys == null || allKeys.Count == 0)
+                {
+                    var exception = new Exception();
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "А ключиков то нету");
+                    throw exception;
+                }
+                var keyList = new AllKeysDTO();
+                keyList.List = new List<OneKeyDTO>();
+                foreach (var key in allKeys)
+                {
+                    keyList.List.Add(new OneKeyDTO
+                    {
+                        Id = key.Id,
+                        FacultyId = key.FacultyId,
+                        Number = key.CabinetNumber
+                    });
+                }
+                return keyList;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+        }
+
         public async Task<KeyListDTO> GetList()
         {
             try

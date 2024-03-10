@@ -47,6 +47,21 @@ namespace Key_monitoring.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllKeys")]
+        public async Task<IActionResult> GetAllKeys()
+        {
+            try
+            {
+                return Ok(await _keyService.GetAllKeys());
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
         [Route("GetFullKeyList")]
         public async Task<IActionResult> KeyList()
         {
