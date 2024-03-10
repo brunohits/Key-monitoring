@@ -48,7 +48,7 @@ public class EmailService : IEmail
         Random _rdm = new Random();
 
         int number = _rdm.Next(_min, _max);
-        MailAddress from = new MailAddress("keymonitoring2024@gmail.com", "Admin");
+        MailAddress from = new MailAddress("keymonitoring2024@gmail.com", "Admin"); 
         MailAddress toAddress = new MailAddress($"{userEmailWhere.Email}", $"{userEmailWhere.FullName}");
 
         MailMessage mailMessage = new MailMessage(from, toAddress);
