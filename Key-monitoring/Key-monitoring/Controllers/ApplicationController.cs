@@ -38,7 +38,7 @@ namespace Key_monitoring.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        /*
         [HttpPost]
         [Route("ChangeApplicationStatus")]
         public async Task<IActionResult> ApplicationChangeStatus([FromBody] ApplicationStatusDTO data)
@@ -53,7 +53,7 @@ namespace Key_monitoring.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        */
 
         [HttpGet]
         [Route("applicationsList")]

@@ -128,6 +128,7 @@ namespace Key_monitoring.Servises
             }
         }
 
+       
         public async Task<Guid> ChangeApplicationStatus(ApplicationStatusDTO data)
         {
             try
@@ -182,6 +183,7 @@ namespace Key_monitoring.Servises
                 throw new Exception(ex.Message);
             }
         }
+        
 
         public async Task<ApplicationsListDto> GetApplicationsList(ApplicationStatusEnum? status, RoleEnum? role, int? cabinetNumber, string? partOfName, ApplicationSortEnum sort, int page, int size)
         {
