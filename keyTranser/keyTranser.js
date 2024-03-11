@@ -63,11 +63,12 @@ async function getUserList() {
               }),
         });
         const data = await response.json();
+        console.log(data.name);
         if (data.name) {
-            const users = data.name.map(item => item.name);
-            //const useruserID=data.name.map(item => item.id);
-            const users1 = Object.values(data.name);
+            const users1 = data.name.map(item => ({ name: item.name, id: item.id }));
+            console.log(users1);
             insertUsersIntoDropdown(users1);
+            
         }
     } catch (error) {
         console.error('Ошибка', error);
@@ -88,10 +89,11 @@ function insertKeysIntoDropdown(keys) {
 // Вставка списка пользователей в выпадающий список
 function insertUsersIntoDropdown(users) {
     const dropdown = document.getElementById('usersDropdown');
-    dropdown.innerHTML = ''; // Очистка выпадающего списка перед добавлением новых элементов
+    dropdown.innerHTML = '';
     users.forEach(user => {
         const option = document.createElement('option');
-        option.text = user.user;
+        option.text = user.name;
+        console.log(user.name);
         option.value = user.id;
         dropdown.add(option);
     });
