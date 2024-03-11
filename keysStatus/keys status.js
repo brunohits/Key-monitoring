@@ -6,6 +6,7 @@ getOfficeName('https://localhost:7266/api/account/profile', token);
 const url = `https://localhost:7266/api/key/GetFullKeyList`;
 get(url);
 
+let dataArray = [];
 async function get(url) {
   return fetch(url, {
     method: 'GET',
@@ -28,6 +29,8 @@ async function createElement(data) {
     const container = document.querySelector('.element'); // Находим контейнер, в котором будем добавлять элементы
 
     data.list.forEach(item => {
+        let newData = createDataObject(item.id);
+        dataArray.push(newData);
         const newElement = document.createElement('div');
         newElement.classList.add('container', 'mt-2', 'col-12', 'col-lg-6', 'px-0');
         newElement.innerHTML = `
@@ -73,18 +76,28 @@ async function createElement(data) {
 let currentDate = new Date(); // Инициализируем текущую дату
 updateDate(); // Обновляем отображение текущей недели
 
+function createDataObject(id) {
+  return {
+    id: id,
+    date: new Date()
+  };
+}
+
 function slideDate(direction, id) {
+    let desiredElement = dataArray.find(item => item.id === id);
+    console.log(desiredElement.date);
     if (direction === 'left') {
-        currentDate.setDate(currentDate.getDate() - 7); // Сдвигаем дату на 7 дней влево
+        desiredElement.date.setDate(desiredElement.date.getDate() - 7); // Сдвигаем дату на 7 дней влево
     } else {
-        currentDate.setDate(currentDate.getDate() + 7); // Сдвигаем дату на 7 дней вправо
+        desiredElement.date.setDate(desiredElement.date.getDate() + 7); // Сдвигаем дату на 7 дней вправо
     }
     updateDate(id); // Обновляем отображение текущей недели
 }
 
 function updateDate(id) {
-    let startOfWeek = new Date(currentDate);
-    startOfWeek.setDate(currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1)); // Начало текущей недели
+    let desiredElement = dataArray.find(item => item.id === id);
+    let startOfWeek = new Date(desiredElement.date);
+    startOfWeek.setDate(desiredElement.date.getDate() - desiredElement.date.getDay() + (desiredElement.date.getDay() === 0 ? -6 : 1)); // Начало текущей недели
 
     let endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6); // Конец текущей недели
