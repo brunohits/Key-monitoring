@@ -20,3 +20,19 @@ data class Credentials(
 data class AuthResponse(
     val token: String
 )
+
+data class RequestItem(
+    val id: String,
+    val date: String,
+    val ownerId: String,
+    val ownerName: String,
+    val ownerRole: String,
+    val keyId: String,
+    val keyNumber: String,
+    val repetitive: Boolean,
+    val pairStart: String,
+    val status: Int
+)
+
+data class DeleteRequest(val applicationId: String)
+

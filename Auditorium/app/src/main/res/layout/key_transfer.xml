@@ -21,46 +21,15 @@
         tools:layout_editor_absoluteY="30dp" />
 
 
-    <EditText
-        android:id="@+id/user_login_auth"
+    <Spinner
         android:layout_width="220dp"
         android:layout_height="50dp"
-        android:ems="10"
-        android:inputType="text"
-        android:textColorHint="#6a6a6a"
+        android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:textColor="#000000"
-        android:hint="Введите логин" />
+        android:id="@+id/user_spinner"
+        android:entries="@array/user_options"/>
 
 
-
-    <TextView
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:fontFamily="@font/inter_bold"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="10dp"
-        android:layout_marginTop="35dp"
-        android:text="Выберте имеющийся ключ"
-        android:textColor="#000"
-        android:textSize="20sp"
-        tools:layout_editor_absoluteX="47dp"
-        tools:layout_editor_absoluteY="173dp" />
-
-    <EditText
-        android:id="@+id/search_human"
-        android:layout_width="220dp"
-        android:layout_height="50dp"
-        android:ems="10"
-        android:inputType="text"
-        android:textColorHint="#6a6a6a"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:textColor="#000000"
-        android:hint="Введите логин" />
 
 
     <Button

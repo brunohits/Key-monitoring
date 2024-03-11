@@ -17,6 +17,11 @@
         <item>Female</item>
     </string-array>
 
+    <string-array name="user_options">
+        <item>b6b52e40-d6f4-4f51-a854-a22953fff555</item>
+        <item>ef83867e-dfb6-484b-87fa-069e16bcdf80</item>
+    </string-array>
+
     <string-array name="faculty_options">
         <item> 8bc4614c-f8c1-48f1-a82a-ff0ae807ea16 </item>
     </string-array>

@@ -30,6 +30,11 @@ class AuditoryActivity : AppCompatActivity() {
         auditoryList.layoutManager = LinearLayoutManager(this)
         auditoryList.adapter = AuditoryAdapter(auditory, this)
 
+        val button: Button = findViewById(R.id.button_to_booking)
+        button.setOnClickListener {
+            val intent = Intent(this@AuditoryActivity, BookingActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 }
