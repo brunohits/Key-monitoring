@@ -1,10 +1,11 @@
 //раскоммитить псле мёрджа -> var token = localStorage.getItem('token');
     
-var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiNDlmOWNiODctMDY0ZC00MWIyLTlkMjYtNzQzN2ExNmNjMDNiIiwibmJmIjoxNzEwMTQ2NjU2LCJleHAiOjE3MTAxNTAyNTYsImlzcyI6IktleS1Nb25pdG9yaW5nIiwiYXVkIjoiU3R1ZGVudEFuZFRlYWNoZXIifQ.ve9gIX4M71SWGHkBQtIIWRlIhUnfFFmjAj8ygm7ohXs";
-console.log(token) 
+var token = localStorage.getItem('token');
+console.log(token)
 
 
 //раскоммитить после мёрджа -> getOfficeName('https://localhost:7266/api/account/profile', token);
+getOfficeName('https://localhost:7266/api/account/profile', token);
 getKeyList(token);
 
 async function getOfficeName(url, token) {
