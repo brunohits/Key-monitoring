@@ -7,8 +7,48 @@ document.addEventListener('DOMContentLoaded', function() {
     searchButton.addEventListener('click', function() {
         searchApplications();
     });
+
+    // Обработчики событий для кнопок "Принять" и "Отклонить"
+    const tableBody = document.querySelector('.table tbody');
+    tableBody.addEventListener('click', function(event) {
+        const target = event.target;
+        if (target.classList.contains('btn-outline-success')) {
+            // Нажата кнопка "Принять"
+            const applicationId = target.closest('tr').getAttribute('data-id');
+            changeApplicationStatus(applicationId, 1); // 1 - новый статус "Принята"
+        } else if (target.classList.contains('btn-outline-danger')) {
+            // Нажата кнопка "Отклонить"
+            const applicationId = target.closest('tr').getAttribute('data-id');
+            changeApplicationStatus(applicationId, 2); // 2 - новый статус "Отклонена"
+        }
+    });
 });
 
+async function changeApplicationStatus(applicationId, newStatus) {
+    const url = 'https://localhost:7266/api/application/ChangeApplicationStatus';
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiNDlmOWNiODctMDY0ZC00MWIyLTlkMjYtNzQzN2ExNmNjMDNiIiwibmJmIjoxNzEwMTMyMzg1LCJleHAiOjE3MTAxMzU5ODUsImlzcyI6IktleS1Nb25pdG9yaW5nIiwiYXVkIjoiU3R1ZGVudEFuZFRlYWNoZXIifQ.6-UqmlKFi3-Rk2HcvVm4_smdgp_8p33kX_ezbcALMQo";
+    const options = {
+        method: 'POST',
+        headers: {
+            'accept': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            id: applicationId,
+            status: newStatus
+        })
+    };
+
+    try {
+        const response = await fetch(url, options);
+        const data = await response.json();
+        console.log(data); // Выводим ответ сервера в консоль для отладки
+        // Дополнительная логика при успешном изменении статуса (если необходимо)
+    } catch (error) {
+        console.error('Ошибка при изменении статуса заявки:', error);
+    }
+}
 async function getDataFromServer() {
     const url = 'https://localhost:7266/api/application/applicationsList';
     const options = {
