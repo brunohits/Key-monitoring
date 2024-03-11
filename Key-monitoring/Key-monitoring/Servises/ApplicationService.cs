@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Org.BouncyCastle.Pqc.Crypto.Crystals.Kyber;
 
 
 
@@ -206,6 +207,12 @@ namespace Key_monitoring.Servises
 
                 if (status != null)
                 {
+                    var sluch = await _dbContext.Applications.FirstOrDefaultAsync(x => x.Status == status);
+                    if (sluch == null)
+                    {
+                        return appList;
+                    }
+
                     allAppl = allAppl.Where(x => x.Status == status).ToList();
                     if (allAppl == null)
                     {
@@ -215,16 +222,30 @@ namespace Key_monitoring.Servises
 
                 if (role != null)
                 {
-                    allAppl = allAppl.Where(x => x.User.Role == role).ToList();
-                    if (allAppl == null)
+                    var timedList = new List<ApplicationModel>();
+                    foreach (var item in allAppl)
+                    {
+                        var creator = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == item.UserId);
+                        if(creator != null && creator.Role == role)
+                        {
+                            timedList.Add(item);
+                        }
+                    }
+                    if (timedList.Count == 0 || timedList == null)
                     {
                         return appList;
                     }
+                    allAppl = timedList;
                 }
 
                 if (cabinetNumber != null)
                 {
-                    allAppl = allAppl.Where(x => x.Key.CabinetNumber == cabinetNumber).ToList();
+                    var key = await _dbContext.KeyModels.FirstOrDefaultAsync(x => x.CabinetNumber == cabinetNumber);
+                    if(key == null)
+                    {
+                        return appList;
+                    }
+                    allAppl = allAppl.Where(x => x.KeyId == key.Id).ToList();
                     if (allAppl == null)
                     {
                         return appList;
@@ -233,11 +254,20 @@ namespace Key_monitoring.Servises
 
                 if (partOfName != null)
                 {
-                    allAppl = allAppl.Where(x => x.User.FullName.Contains(partOfName)).ToList();
-                    if (allAppl == null)
+                    var timedList = new List<ApplicationModel>();
+                    foreach (var item in allAppl)
+                    {
+                        var creator = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == item.UserId);
+                        if (creator != null && creator.FullName != null && creator.FullName.Contains(partOfName))
+                        {
+                            timedList.Add(item);
+                        }
+                    }
+                    if (timedList.Count == 0 || timedList == null)
                     {
                         return appList;
                     }
+                    allAppl = timedList;
                 }
 
                 switch(sort)
@@ -253,7 +283,7 @@ namespace Key_monitoring.Servises
                 if ((page - 1) * size + 1 > allAppl.Count)
                 {
                     var exception = new Exception();
-                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "To big pag");
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Wrong pag");
                     throw exception;
                 }
                 allAppl = allAppl.Skip((page - 1) * size).Take(size).ToList();

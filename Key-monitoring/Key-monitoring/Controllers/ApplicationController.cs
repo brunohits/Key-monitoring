@@ -61,6 +61,12 @@ namespace Key_monitoring.Controllers
         {
             try
             {
+                if(page == 0 || page == null || size == 0 || size == null)
+                {
+                    var exception = new Exception();
+                    exception.Data.Add(StatusCodes.Status404NotFound.ToString(), "Wrong pag");
+                    throw exception;
+                }
                 return Ok(await _applicationService.GetApplicationsList(status, role, cabinetNumber, partOfName, sort, page, size));
             }
             catch (Exception ex)
